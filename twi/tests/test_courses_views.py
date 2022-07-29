@@ -1,6 +1,4 @@
 from django.test import TestCase
-from bs4 import BeautifulSoup
-import requests
 from courses.models import Course, Action, Step
 
 

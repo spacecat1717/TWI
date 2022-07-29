@@ -1,1 +1,1 @@
-django==4.x
+django==3.2.7

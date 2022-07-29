@@ -1,0 +1,21 @@
+{% extends 'courses/base.html' %}
+
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+    <title> {{course.title}}</title>
+   {% endblock %}
+</head>
+
+<body>
+  {% block content %}
+    <div class="text-center">
+      <h4> {{course.title}}</h4>
+      {% for action in course_actions %}
+         <a class="link" href="/courses/{{course.slug}}/{{action.slug}}/">{{action.title}}</a>
+         <img src="{{action.cover.url}}">
+      {% endfor %}
+    </div>
+  {% endblock %}
+</body>
+

@@ -1,0 +1,27 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+<!--TODO: add button for new course-->
+
+<head>
+   <meta charset="UTF-8">
+   {% block title %}
+    <title> Courses </title>
+   {% endblock %}
+</head>
+
+<body>
+   {% block content %}
+   <div class="list-group w-auto">
+      {% for course in courses %}
+        <a href="/courses/{{course.slug}}/">
+           <img src="{{course.cover.url}}">
+        </a>
+        <div>
+           <h6 class="mb-0">{{course.title}}</h6>
+           <p> {{course.description|linebreaks}}</p>
+           <p> {{course.date_added}}</p>
+        </div>
+      {% endfor %}
+   </div>
+  {% endblock content %}
+</body>

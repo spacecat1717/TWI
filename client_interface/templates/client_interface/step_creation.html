@@ -1,0 +1,59 @@
+{% extends 'client_interface/base.html' %}
+{% load bootstrap5 %}
+
+<head>
+    {% block title %}
+    <title>
+        Курс {{course.title}}
+    </title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
+      {% csrf_token %}
+      <div>
+        {{ form.non_field_errors }}
+        {{ form.field.errors }}
+        <label for="{{form.action.id_for_label}}">Выберите раздел, к которому относится шаг</label>
+        <br>
+        {{form.action}}
+    </div>
+    <br>
+     <div>
+         {{ form.non_field_errors }}
+         {{ form.field.errors }}
+         <label for="{{form.title.id_for_label}}">Название шага</label>
+         <br>
+         {{form.title}}
+     </div>
+     <br>
+     <div>
+         {{ form.non_field_errors }}
+         {{ form.field.errors }}
+         <label for="{{form.description.id_for_label}}">Краткое описание шага</label>
+         <br>
+         {{form.description}}
+     </div>
+     <br>
+     <div>
+        {{ form.non_field_errors }}
+        {{ form.field.errors }}
+        <label for="{{form.text.id_for_label}}">Основная инструкция</label>
+        <br>
+        {{form.text}}
+    </div>
+    <br>
+    <div>
+        {{ form.non_field_errors }}
+        {{ form.field.errors }}
+        <label for="{{form.photos.id_for_label}}">Приложите фотографии</label>
+        <br>
+        {{form.photos}}
+    </div>
+    <br>
+     <button class="btn btn-primary" style="background-color: #b0b5f8" name='submit' > Создать</button>
+    </form>
+    {% endblock %}
+</body>

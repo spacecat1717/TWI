@@ -1,0 +1,25 @@
+{% extends 'courses/base.html' %}
+
+<head>
+    {% block title %}
+    <title> {{action.title}}</title>
+    {%endblock%}
+</head>
+
+<body>
+    {% block content %}
+    <h3> {{course.title}}</h3>
+    <h5> {{action.title}}</h5>
+      <div class="text-center">
+        {% for step in steps %}
+          <ul>
+            <li>
+                <a href="/courses/{{course.slug}}/{{action.slug}}/{{step.slug}}/">{{step.title}}</a>
+                <!--TODO: add photo-->
+                <p>{{step.description}}</p>
+            </li>
+          </ul>
+        {% endfor %}  
+      </div>
+     {%endblock%} 
+</body>

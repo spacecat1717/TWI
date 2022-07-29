@@ -1,0 +1,43 @@
+{% extends 'client_interface/base.html' %}
+{% load bootstrap5 %}
+
+<head>
+    {% block title %}
+    <title>
+        Создание курса 
+    </title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
+        {% csrf_token %}
+        <div>
+            {{ form.non_field_errors }}
+            {{ form.field.errors }}
+            <label for="{{form.title.id_for_label}}">Название курса</label>
+            <br>
+            {{form.title}}
+        </div>
+        <br>
+        <div>
+            {{ form.non_field_errors }}
+            {{ form.field.errors }}
+            <label for="{{form.description.id_for_label}}">Описание курса</label>
+            <br>
+            {{form.description}}
+        </div>
+        <br>
+        <div>
+            {{ form.non_field_errors }}
+            {{ form.field.errors }}
+            <label for="{{form.cover.id_for_label}}">Обложка для вашего курса</label>
+            <br>
+            {{form.cover}}
+        </div>
+        <br>
+        <button class="btn btn-primary" style="background-color: #b0b5f8" name='submit' > Создать</button>
+    </form>
+    {% endblock %}
+</body>

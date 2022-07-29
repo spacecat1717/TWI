@@ -1,0 +1,19 @@
+{% extends 'courses/base.html' %}
+
+<head>
+    {% block title %}
+    <title>{{step.title}}</title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <div class="text-center">
+        <h2>{{course.title}}</h2>
+        <h3>{{action.title}}</h3>
+        <h5>{{step.title}}</h5>
+        <h6> {{step.description}}</h6>
+        <p> {{step.main_text | linebreaks }}</p>
+    </div>
+    {% endblock %}
+</body>

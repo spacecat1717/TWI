@@ -18,7 +18,7 @@ jobs:
     - name: Setup Python ${{ matrix.python-version }}
       uses: action/setup-python@v3
       with:
-       python-version: 3.9
+       python-version: ${{ matrix.python-version }}
        architecture: 'x64'
     - name: Install Dependencies
       run: |

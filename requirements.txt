@@ -1,2 +1,2 @@
 django==3.2.7
-django-bootstap-v5==5.1.5.11
+django-bootstap-v5==1.0.11

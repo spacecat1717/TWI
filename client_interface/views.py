@@ -23,9 +23,9 @@ def course_creation(request):
             cover=cd['cover'],
             slug=slugify(cd['title']))
             return redirect('client_interface:course_added', course.slug)
-    else:        
-        form = CourseCreationForm()
-        return render(request, 'client_interface/course_creation.html', {'form': form})
+        raise ValidationError(_(form.errors))
+    form = CourseCreationForm()
+    return render(request, 'client_interface/course_creation.html', {'form': form})
 
 def course_added(request, course_slug):
     course = Course.objects.get(slug=course_slug)
@@ -43,12 +43,10 @@ def action_creation(request, course_slug):
                                         cover=cd['cover'],
                                         slug=slugify(cd['title']))
             return redirect('client_interface:action_added', course.slug, action.slug)
-        else:print(form.errors)
-
+        raise ValidationError(_(form.errors))
     else:
-        course = Course.objects.get(slug=course_slug)
         form = ActionCreationForm()
-        return render(request, 'client_interface/action_creation.html', {'course': course, 'form': form})
+        return render(request, 'client_interface/action_creation.html', {'form': form})
 
 def action_added(request, course_slug, action_slug):
     action = Action.objects.get(slug=action_slug)
@@ -65,7 +63,6 @@ def action_choices_execute(course_slug):
         actions.append(action.title)
         keys.append(action.title)
     action_choices = [(key, action) for key, action in zip(keys, actions)]
-    print('choices', action_choices)
     return action_choices
 
 def step_creation(request, course_slug):
@@ -87,8 +84,7 @@ def step_creation(request, course_slug):
                 photo.photo.save(f.name, ContentFile(data))
                 photo.save()                   
             return redirect('client_interface:step_added', course.slug, step.slug)
-        else:
-            print(form.errors)
+        raise ValidationError(_(form.errors))
     else:
         action_choices = action_choices_execute(course_slug)
         choice_field = forms.ChoiceField(widget=forms.Select(),

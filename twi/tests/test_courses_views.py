@@ -138,5 +138,7 @@ class StepViewTest(TestCase):
         self.assertEqual(step_showed.title, step.title)
         self.assertEqual(step_showed.description, step.description)
         self.assertEqual(step_showed.main_text, step.main_text)
-        #TODO: add photos test
+        
+
+        
                

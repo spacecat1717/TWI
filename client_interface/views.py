@@ -3,16 +3,19 @@ from django import forms
 from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
 from django.core.files.base import ContentFile
+from django.contrib.auth.decorators import login_required
 from django.template.defaultfilters import slugify
 from .forms import CourseCreationForm, ActionCreationForm, StepCreationForm
 from courses.models import Course, Action, Step, StepPhoto
 
 """main client page"""
+@login_required
 def index(request):
     return render(request, 'client_interface/index.html')
 
 
 """course creation views"""
+@login_required
 def course_creation(request):
     if request.method == 'POST':
         form = CourseCreationForm(request.POST, request.FILES)
@@ -21,17 +24,20 @@ def course_creation(request):
             course = Course.objects.create(title=cd['title'],
             description=cd['description'],
             cover=cd['cover'],
-            slug=slugify(cd['title']))
+            slug=slugify(cd['title']),
+            owner=request.user)
             return redirect('client_interface:course_added', course.slug)
         raise ValidationError(_(form.errors))
     form = CourseCreationForm()
     return render(request, 'client_interface/course_creation.html', {'form': form})
 
+@login_required
 def course_added(request, course_slug):
     course = Course.objects.get(slug=course_slug)
     return render(request, 'client_interface/course_added.html', {'course': course})
 
 
+@login_required
 def action_creation(request, course_slug):
     if request.method == 'POST':
         form = ActionCreationForm(request.POST, request.FILES)
@@ -48,6 +54,7 @@ def action_creation(request, course_slug):
         form = ActionCreationForm()
         return render(request, 'client_interface/action_creation.html', {'form': form})
 
+@login_required
 def action_added(request, course_slug, action_slug):
     action = Action.objects.get(slug=action_slug)
     return render(request, 'client_interface/action_added.html', {'action': action})
@@ -65,6 +72,7 @@ def action_choices_execute(course_slug):
     action_choices = [(key, action) for key, action in zip(keys, actions)]
     return action_choices
 
+@login_required
 def step_creation(request, course_slug):
     course = Course.objects.get(slug=course_slug)
     if request.method == 'POST':
@@ -93,6 +101,7 @@ def step_creation(request, course_slug):
         form.fields['action'] = choice_field
         return render(request, 'client_interface/step_creation.html', {'course': course, 'form': form})
 
+@login_required
 def step_added(request, course_slug, step_slug):
     step = Step.objects.get(slug=step_slug)
     return render(request, 'client_interface/step_added.html', {'step': step})

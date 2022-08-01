@@ -1,0 +1,19 @@
+<!--login template-->
+{% extends "courses/base.html" %}
+{% load static %}
+
+{%block title %}Login{% endblock  %}
+
+{% block content  %}
+    <div class="container jumbotron text-justify">
+    <h1 class="display-4">Войти в аккаунт </h1>
+    <form id="login_form" class="form" method="post" action="{% url 'account:login' %}">
+    {% csrf_token %} <!-- for security reasons -->
+    {{login_form.as_p}} <!-- rendering form as paragraph -->
+    <input type="submit" class="btn  btn-outline-info" value="Login">
+    </form>
+    <p ><a class="px-2 mx-2 btn btn-link text-decoration-none" href="{%url 'account:register' %}">Регистрация</a>
+
+    </div>
+{% endblock %}
+

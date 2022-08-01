@@ -20,9 +20,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #TODO:change this path later
-    path('', include('courses.urls',  namespace='courses')),
-    #TODO: change this path later (with courses path too)
+    path('courses/', include('courses.urls',  namespace='courses')),
     path('client/', include('client_interface.urls', namespace='client_interface')),
+    path('account/', include('account.urls', namespace='account')),
 
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

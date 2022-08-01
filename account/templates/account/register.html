@@ -1,0 +1,23 @@
+<!--register template-->
+{% extends "courses/base.html" %}
+{% load static %}
+<head>
+<title> {%block title %}Регистрация{% endblock  %}</title>
+</head>
+{% block content %}
+
+    <div class="container jumbotron">
+    {% if registered %}
+        <strong>Мы рады, что вы с нами</strong>
+        <a href="{% url 'client_interface:index' %}" class="btn-link btn">Перейти к управлению курсами</a><br>
+    {% else %}
+        <strong class="display-3 mb-4">Регистрация </strong>
+        <form action="{% url 'account:register' %}" class="pt-3" method="POST">
+            {% csrf_token %}
+            {{ registration_form.as_p }}
+            <input type="submit" name="submit" value="Register" class="btn btn-success">
+            <p class="p-2 m-1">У Вас уже есть аккаунт? <a href="{% url 'account:login' %}">Вход</a></p>
+        </form>
+    {% endif %}
+    </div>
+{% endblock %}

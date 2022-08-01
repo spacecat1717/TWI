@@ -11,15 +11,15 @@ class CoursesListTest(TestCase):
                     cover='/media/courses/covers/static/20_Lazy_Cats_That_Will_Make_You_LOL.jpg')
 
     def test_view_url_exists(self):
-        response = self.client.get('/courses_list/')
+        response = self.client.get('/courses/courses_list/')
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
-        response = self.client.get('/courses_list/')
+        response = self.client.get('/courses/courses_list/')
         self.assertTemplateUsed(response, 'courses/courses_list.html')
 
     def test_context_is_correct(self):
-        response = self.client.get('/courses_list/')
+        response = self.client.get('/courses/courses_list/')
         courses = Course.objects.all()
         first_object = response.context['courses'][0]
         for course in courses:    
@@ -58,19 +58,6 @@ class CourseViewTest(TestCase):
         self.assertEquals(first_course_action.cover, action.cover)
         self.assertTrue(len(response.context['course_actions']) == len(actions))
 
-    """ TODO: надо найти способ проверять ссылки на страницах (парсинг)
-    def test_link_to_action_working(self):
-        course = Course.objects.get(id=1)
-        action = Action.objects.get(id=1)
-        get = self.client.get(f'/courses/{course.slug}/')
-        response = get.html
-        page_content = BeautifulSoup(response.text, 'lxml')
-        link_raw = page_content.find('a', class_='link')
-        link = link_raw.text
-        print('parsed link', link)
-        redirect_response = self.client.get(link)
-        self.assertEqual(redirect_response.status_code, 200)
-        """
 
 class ActionViewTest(TestCase):
     @classmethod

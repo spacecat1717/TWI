@@ -3,6 +3,8 @@ from django.shortcuts import reverse
 from django.template.defaultfilters import slugify
 from autoslug import AutoSlugField
 import datetime, pytils
+from account.models import Account
+
 
 class Course(models.Model):
     title = models.CharField(max_length=100)
@@ -10,6 +12,7 @@ class Course(models.Model):
     description = models.CharField(max_length=250)
     cover = models.ImageField(upload_to = 'media/courses/covers/static/', null=True)
     slug = AutoSlugField(populate_from='title', unique=True, db_index=True)
+    owner = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
 
     def get_absolute_url(self):
         return f'/courses/{self.title}/'

@@ -3,19 +3,25 @@
 <head>
     <meta charset="UTF-8">
     {% block title %}
-    <title> {{course.title}}</title>
+    <title> {{action.course.title}}</title>
    {% endblock %}
 </head>
 
 <body>
   {% block content %}
-    <div class="text-center">
-      <h4> {{course.title}}</h4>
-      {% for action in course_actions %}
-         <a class="link" href="/courses/{{course.slug}}/{{action.slug}}/">{{action.title}}</a>
-         <img src="{{action.cover.url}}">
-      {% endfor %}
-    </div>
+  <h4 class="text-center"> {{course.title}}</h4>
+  <div class="list-group w-auto">
+    {% for action in course_actions %}
+    <a href="/courses/{{course.slug}}/{{action.slug}}/" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+      <img src="#">
+      <div class="d-flex gap-2 w-100 justify-content-between">
+        <div>
+         <h6 class="mb-0">{{action.title}}</h6>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
   {% endblock %}
 </body>
 

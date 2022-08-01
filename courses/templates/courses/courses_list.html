@@ -1,27 +1,33 @@
 {% extends 'courses/base.html' %}
-{% load static %}
-<!--TODO: add button for new course-->
+
 
 <head>
    <meta charset="UTF-8">
    {% block title %}
-    <title> Courses </title>
+    <title> Доступные курсы </title>
    {% endblock %}
 </head>
 
 <body>
    {% block content %}
-   <div class="list-group w-auto">
-      {% for course in courses %}
-        <a href="/courses/{{course.slug}}/">
-           <img src="{{course.cover.url}}">
-        </a>
-        <div>
-           <h6 class="mb-0">{{course.title}}</h6>
-           <p> {{course.description|linebreaks}}</p>
-           <p> {{course.date_added}}</p>
+   <div class="container-fluid px-4 py-5" id="featured-3">
+      <h2 class="pb-2 border-bottom">Доступные курсы</h2>
+      
+      <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+         {% for course in courses %} 
+        <div class="feature col" style="background-color: #f1f1f0ec">
+          <h2>{{course.title}}</h2>
+          <p>{{course.description | linebreaks }}</p>
+          <p class="text-secondary"> {{course.date_added}}</p>
+          <a href="/courses/{{course.slug}}/" class="icon-link d-inline-flex align-items-center">
+            Перейти к курсу
+            <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
+          </a>
         </div>
-      {% endfor %}
-   </div>
-  {% endblock content %}
+        <br>
+        {% endfor %}
+      </div>
+    </div>
+    
+  {% endblock %}
 </body>

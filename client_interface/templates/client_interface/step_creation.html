@@ -11,49 +11,58 @@
 
 <body>
     {% block content %}
-    <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
-      {% csrf_token %}
-      <div>
-        {{ form.non_field_errors }}
-        {{ form.field.errors }}
-        <label for="{{form.action.id_for_label}}">Выберите раздел, к которому относится шаг</label>
-        <br>
-        {{form.action}}
-    </div>
-    <br>
-     <div>
-         {{ form.non_field_errors }}
-         {{ form.field.errors }}
-         <label for="{{form.title.id_for_label}}">Название шага</label>
-         <br>
-         {{form.title}}
-     </div>
-     <br>
-     <div>
-         {{ form.non_field_errors }}
-         {{ form.field.errors }}
-         <label for="{{form.description.id_for_label}}">Краткое описание шага</label>
-         <br>
-         {{form.description}}
-     </div>
-     <br>
-     <div>
-        {{ form.non_field_errors }}
-        {{ form.field.errors }}
-        <label for="{{form.text.id_for_label}}">Основная инструкция</label>
-        <br>
-        {{form.text}}
-    </div>
-    <br>
-    <div>
-        {{ form.non_field_errors }}
-        {{ form.field.errors }}
-        <label for="{{form.photos.id_for_label}}">Приложите фотографии</label>
-        <br>
-        {{form.photos}}
-    </div>
-    <br>
-     <button class="btn btn-primary" style="background-color: #b0b5f8" name='submit' > Создать</button>
-    </form>
+    <main class="form-signin w-100 ">
+        <h1 class="h3 mb-3 fw-normal">Создать ключевой момент</h1>
+        <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
+            {% csrf_token %}
+            <div class="form-floating">
+              {{ form.non_field_errors }}
+              {{ form.field.errors }}
+              <label for="{{form.action.id_for_label}}">Выберите этап работ, к которому относится момент</label>
+              <br>
+              <br>
+              {{form.action}}
+          </div>
+          <br>
+           <div class="form-floating">
+               {{ form.non_field_errors }}
+               {{ form.field.errors }}
+               <label for="{{form.title.id_for_label}}">Название ключевого момента</label>
+               <br>
+               <br>
+               {{form.title}}
+           </div>
+           <br>
+           <div class="form-floating">
+               {{ form.non_field_errors }}
+               {{ form.field.errors }}
+               <label for="{{form.description.id_for_label}}">Укажите причину выделения ключевого момента</label>
+               <br>
+               <br>
+               {{form.description}}
+           </div>
+           <br>
+           <div class="form-floating">
+              {{ form.non_field_errors }}
+              {{ form.field.errors }}
+              <label for="{{form.text.id_for_label}}">Основная инструкция</label>
+              <br>
+              <br>
+              {{form.text}}
+          </div>
+          <br>
+          <div class="form-floating">
+              {{ form.non_field_errors }}
+              {{ form.field.errors }}
+              <label for="{{form.photos.id_for_label}}">Приложите фотографии (необязательно)</label>
+              <br>
+              <br>
+              {{form.photos}}
+          </div>
+          <br>
+           <button class="btn btn-primary" style="background-color: #b0b5f8" name='submit' > Создать</button>
+          </form>
+    </main>
+    
     {% endblock %}
 </body>

@@ -11,33 +11,40 @@
 
 <body>
     {% block content %}
-    <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
-        {% csrf_token %}
-        <div>
-            {{ form.non_field_errors }}
-            {{ form.field.errors }}
-            <label for="{{form.title.id_for_label}}">Название курса</label>
+    <main class="form-signin w-100 ">
+        <h1 class="h3 mb-3 fw-normal">Создать курс</h1>
+        <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
+            {% csrf_token %}
+            <div class="form-floating">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label for="{{form.title.id_for_label}}">Введите название курса</label>
+                <br>
+                <br>
+                {{form.title}}
+            </div>
             <br>
-            {{form.title}}
-        </div>
-        <br>
-        <div>
-            {{ form.non_field_errors }}
-            {{ form.field.errors }}
-            <label for="{{form.description.id_for_label}}">Описание курса</label>
+            <div class="form-floating">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label for="{{form.description.id_for_label}}">Введите краткое описание курса</label>
+                <br>
+                <br>
+                {{form.description}}
+            </div>
             <br>
-            {{form.description}}
-        </div>
-        <br>
-        <div>
-            {{ form.non_field_errors }}
-            {{ form.field.errors }}
-            <label for="{{form.cover.id_for_label}}">Обложка для вашего курса</label>
+            <div>
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label for="{{form.cover.id_for_label}}">Прикрепите обложку (необязательно)</label>
+                <br>
+                <br>
+                {{form.cover}}
+            </div>
             <br>
-            {{form.cover}}
-        </div>
-        <br>
-        <button class="btn btn-primary" style="background-color: #b0b5f8" name='submit' > Создать</button>
-    </form>
+            <button class="w-100 btn btn-lg btn-primary" style="background-color: #b0b5f8" name='submit' > Создать</button>
+        </form>
+    </main>
+    
     {% endblock %}
 </body>

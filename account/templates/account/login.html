@@ -2,18 +2,40 @@
 {% extends "courses/base.html" %}
 {% load static %}
 
-{%block title %}Login{% endblock  %}
+<head>
+ 
+</head>
 
-{% block content  %}
-    <div class="container jumbotron text-justify">
-    <h1 class="display-4">Войти в аккаунт </h1>
-    <form id="login_form" class="form" method="post" action="{% url 'account:login' %}">
-    {% csrf_token %} <!-- for security reasons -->
-    {{login_form.as_p}} <!-- rendering form as paragraph -->
-    <input type="submit" class="btn  btn-outline-info" value="Login">
-    </form>
-    <p ><a class="px-2 mx-2 btn btn-link text-decoration-none" href="{%url 'account:register' %}">Регистрация</a>
+<body class="text-center">
+    {% block content  %}
+    <main class="form-signin w-100 ">
+        <h1 class="h3 mb-3 fw-normal">Вход в аккаунт</h1>
+        <form id="login_form" class="form-control" method="post" action="{% url 'account:login' %}">
+        {% csrf_token %}
+        <div class="form-floating">
+            {{ login_form.non_field_errors }}
+            {{ login_form.field.errors }}
+          <label for="{{login_form.email.id_for_label}}">Email</label>
+          <br>
+          <br>
+          {{login_form.email}}
+        </div>
+        <div class="form-floating">
+            {{ login_form.non_field_errors }}
+            {{ login_form.field.errors }}
+          <label type="password" for="{{login_form.password.id_for_label}}">Пароль</label>
+          <br>
+          <br>
+          {{login_form.password}}
+        </div>
+        <br>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+      </form>
+      <p ><a class="px-2 mx-2 btn btn-link text-decoration-none" href="{%url 'account:register' %}">Регистрация</a></p>
+    </main>
+    {% endblock %}
+</body>
 
-    </div>
-{% endblock %}
+ 
+
 

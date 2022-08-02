@@ -23,24 +23,19 @@ def registration(request):
     if request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            #form.save()
             email = form.cleaned_data['email']
             raw_pass = form.cleaned_data['password1']
             account = authenticate(email=email, password = raw_pass)
-            print(email, raw_pass)
             form.save()
-            #login(request, account)
-            messages.success(request, "Вы были зарегистрированы как {}".format(request.user.username))
             return redirect('client_interface:index')
         else:
             messages.error(request, "Пожалуйста, исправьте следующие ошибки")
-            context['registration_form'] = form
-            
+            context['registration_form'] = form 
     else:
-        form = AccountAuthenticationForm()
-        context['login_form'] = form
-        return render(request, 'account/register.html', context)
-    return render(request, 'account/register.html', context)
+        form = RegistrationForm()
+        return render(request, 'account/register.html', {'form': form})
+    return render(request, 'account/register.html', {'form': form})
+    
 
 def logout_view(request):
     logout(request)

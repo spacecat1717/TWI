@@ -6,20 +6,26 @@ from django.contrib.auth.forms import UserCreationForm
 
 class RegistrationForm(UserCreationForm):
     """Form for Registering new users"""
-    email = forms.EmailField(max_length=100)
     class Meta:
         model = Account
         fields = ('email', 'username', 'password1', 'password2')
+        
+        widgets = {
+            'email':forms.TextInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'password1': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'password2': forms.PasswordInput(attrs={'class': 'form-control'}),
+        }
+      
 
 class AccountAuthenticationForm(forms.ModelForm):
     """Form for Logging in  users"""
-    password = forms.CharField(label = 'Пароль', widget=forms.PasswordInput)
     class Meta:
         model = Account
         fields = ('email', 'password')
         widgets = {
             'email': forms.TextInput(attrs={'class': 'form-control'}),
-            'password': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'}),
         }
 
     

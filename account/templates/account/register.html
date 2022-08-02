@@ -1,23 +1,57 @@
 <!--register template-->
 {% extends "courses/base.html" %}
 {% load static %}
-<head>
-<title> {%block title %}Регистрация{% endblock  %}</title>
-</head>
-{% block content %}
 
-    <div class="container jumbotron">
-    {% if registered %}
-        <strong>Мы рады, что вы с нами</strong>
-        <a href="{% url 'client_interface:index' %}" class="btn-link btn">Перейти к управлению курсами</a><br>
-    {% else %}
-        <strong class="display-3 mb-4">Регистрация </strong>
-        <form action="{% url 'account:register' %}" class="pt-3" method="POST">
+<head>
+
+</head>
+
+
+<body class="text-center">
+    {% block content %}
+    <main class="form-signin w-100 ">
+        <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
+        <form  class="form-control" method="post" action="{% url 'account:register' %}">
             {% csrf_token %}
-            {{ registration_form.as_p }}
-            <input type="submit" name="submit" value="Register" class="btn btn-success">
-            <p class="p-2 m-1">У Вас уже есть аккаунт? <a href="{% url 'account:login' %}">Вход</a></p>
+                <div class="form-floating">
+                    {{ form.non_field_errors }}
+                    {{ form.field.errors }}
+                    <label for="{{form.email.id_for_label}}">Email</label>
+                    <br>
+                    <br>
+                    {{form.email}}
+                </div>
+                <div class="form-floating">
+                    {{ form.non_field_errors }}
+                    {{ form.field.errors }}
+                    <label for="{{form.username.id_for_label}}">Логин</label>
+                    <br>
+                    <br>
+                    {{form.username}}
+                </div>
+                <div class="form-floating">
+                    {{ form.non_field_errors }}
+                    {{ form.field.errors }}
+                    <label type="password" for="{{form.password1.id_for_label}}">Пароль</label>
+                    <br>
+                    <br>
+                    {{form.password1}}
+                </div>
+                <div class="form-floating">
+                    {{ form.non_field_errors }}
+                    {{ form.field.errors }}
+                    <label type="password" for="{{form.password2.id_for_label}}">Повторите пароль</label>
+                    <br>
+                    <br>
+                    {{form.password2}}
+                </div>
+                <br>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Зарегистрироваться</button>
         </form>
-    {% endif %}
-    </div>
-{% endblock %}
+        <p class="px-2 mx-2 btn btn-link text-decoration-none">У Вас уже есть аккаунт? <a href="{% url 'account:login' %}">Вход</a></p>
+    </main>
+    {% endblock %}
+</body>
+
+
+    

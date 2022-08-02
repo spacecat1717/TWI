@@ -105,3 +105,24 @@ def step_creation(request, course_slug):
 def step_added(request, course_slug, step_slug):
     step = Step.objects.get(slug=step_slug)
     return render(request, 'client_interface/step_added.html', {'step': step})
+
+
+"""showing view """
+
+@login_required
+def all_courses(request):
+    courses = Course.objects.filter(owner=request.user)
+    return render(request, 'client_interface/all_courses.html', {'courses': courses})
+
+@login_required
+def course_showing(request, course_slug):
+    course = Course.objects.get(slug=course_slug)
+    actions = course.action_set.all()
+    for action in actions:
+        steps = action.step_set.all()
+    for step in steps:
+        photos = step.photos.all()
+    context = {'course': course, 'actions': actions, 'steps': steps, 'photos': photos}
+    return render (request, 'client_interface/course_showing.html', context)
+
+

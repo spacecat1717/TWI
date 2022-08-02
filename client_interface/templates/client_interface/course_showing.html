@@ -1,0 +1,83 @@
+{% extends 'client_interface/base.html' %}
+
+<head>
+    {% block title %}
+    <title>
+        {{course.title}}
+    </title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <h1 class="display-5 fw-bold text-center">Курс {{course.title}}</h1>
+    <table class="table table-success table-striped">
+        <thead>
+            <tr>
+              <th scope="col">Обложка</th>
+              <th scope="col">Название курса</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% if course.cover %}
+                <th scope="row">
+                    <img class="img-thimbnails" src="{{course.cover.url}}" width="300" height="300">   
+                </th>
+                {% endif %}
+                <td scope="row">{{course.title}}</td>
+            </tr>
+    </table>  
+    {% for action in actions %}
+    <table class="table table-success table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Обложка раздела</th>
+                <th scope="col">Название раздела</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% if action.cover %}
+                <th scope="row">
+                    <img class="img-thimbnails" src="{{action.cover.url}}" width="300" height="300">
+                </th>
+                {% endif %}
+                <td scope="row">{{action.title}}</td>
+            </tr>
+            {% for step in steps %}
+            <table class="table table-success table-striped">
+                <tbody>
+                    <tr>
+                        <th scope="col">Ключевой момент</th>
+                        <td scope="col">{{step.title}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Причины выделения ключевого момента</th>
+                        <td scope="col">{{step.description}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Основная инструкция</th>
+                        <td scope="col">{{step.main_text}}</td>
+                    </tr>
+                    {% if step.photos %}
+                    <table class="table table-success table-striped">
+                        <tbody>
+                            <tr>
+                                {% for photo in photos %}
+                                <th scope="col">
+                                    <img class="img-thimbnails" src="{{photo.photo.url}}" width="300" height="300">  
+                                </th>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table> 
+                    {% endif %}   
+                  {% endfor %}
+                </tbody>
+            </table>
+          {% endfor %}
+        </tbody>
+    </table>       
+  {% endblock %}   
+</body>

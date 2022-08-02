@@ -19,7 +19,7 @@
           <h2>{{course.title}}</h2>
           <p>{{course.description | linebreaks }}</p>
           <p class="text-secondary"> {{course.date_added}}</p>
-          <a href="/courses/{{course.slug}}/" class="icon-link d-inline-flex align-items-center">
+          <a href="{% url 'courses:course_view' course.slug %}" class="icon-link d-inline-flex align-items-center">
             Перейти к курсу
             <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
           </a>

@@ -90,7 +90,6 @@ class ActionViewTest(TestCase):
         self.assertEqual(first_action_step.title, step.title)
         self.assertEqual(first_action_step.description, step.description)
         self.assertEqual(first_action_step.main_text, step.main_text)
-        #TODO: add photos test
         self.assertTrue(len(response.context['steps']) == len(steps)) 
 
 class StepViewTest(TestCase):

@@ -118,11 +118,10 @@ def all_courses(request):
 def course_showing(request, course_slug):
     course = Course.objects.get(slug=course_slug)
     actions = course.action_set.all()
-    for action in actions:
-        steps = action.step_set.all()
+    steps = Step.objects.all()
     for step in steps:
         photos = step.photos.all()
-    context = {'course': course, 'actions': actions, 'steps': steps, 'photos': photos}
+    context = {'course': course, 'actions': actions, 'steps': steps}
     return render (request, 'client_interface/course_showing.html', context)
 
 

@@ -46,6 +46,7 @@
                 <td scope="row">{{action.title}}</td>
             </tr>
             {% for step in steps %}
+            {% if step.action == action %}
             <table class="table table-success table-striped">
                 <tbody>
                     <tr>
@@ -72,7 +73,8 @@
                             </tr>
                         </tbody>
                     </table> 
-                    {% endif %}   
+                    {% endif %}  
+                   {% endif %} 
                   {% endfor %}
                 </tbody>
             </table>

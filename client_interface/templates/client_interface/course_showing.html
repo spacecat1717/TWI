@@ -10,24 +10,46 @@
 
 <body>
     {% block content %}
+    <br>
+    <br>
+    <br>
     <h1 class="display-5 fw-bold text-center">Курс {{course.title}}</h1>
-    <table class="table table-striped">
+    <table class="table">
+        <col style="width:15%">
+        <col style="width:15%">
+        <col style="width:20%">
+        <col style="width:40%">
+        <col style="width:10%">
         <thead>
             <tr>
-              <th scope="col">Обложка</th>
-              <th scope="col">Название курса</th>
+              <th scope="col">Этап</th>
+              <th scope="col">Ключевой момент</th>
+              <th scope="col">Причина выделения ключевого момента</th>
+              <th scope="col">Основная инструкция</th>
+              <th scope="'col">Действия</th>
             </tr>
         </thead>
         <tbody>
+                {% for action in actions %}
+                {% for step in steps %}
+                {% if step.action == action %}
             <tr>
-                {% if course.cover %}
-                <th scope="row">
-                    <img class="img-thimbnails" src="{{course.cover.url}}" width="300" height="300">   
-                </th>
+                <td scope="row" style="background-color: #CCCCCC">{{action.title | linebreaks}}</td> 
+                <td scope="row">{{step.title}}</td>
+                <td scope="row" style="background-color: #CCCCCC">{{step.description}}</td>
+                <td scope="row">{{step.main_text | linebreaks}}</td>
+                <td scope="row" style="background-color: #CCCCCC" class="text-end">
+                    <a href="#" class="btn btn-outline-primary">Редактировать</a>
+                    <br>
+                    <br>
+                    <a href="#" class="btn btn-outline-danger">Удалить</a>
+                </td>
                 {% endif %}
-                <td scope="row">{{course.title}}</td>
+                {% endfor %}
+                {% endfor %}
             </tr>
-    </table>  
+    </table> 
+    <!---
     {% for action in actions %}
     <table class="table  table-striped">
         <thead>
@@ -82,6 +104,7 @@
             </table>
           {% endfor %}
         </tbody>
-    </table>       
+    </table>  
+    -->      
   {% endblock %}   
 </body>

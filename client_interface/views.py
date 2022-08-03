@@ -131,7 +131,11 @@ def course_showing(request, course_slug):
     actions = course.action_set.all()
     steps = Step.objects.all()
     photos = StepPhoto.objects.all()
-    context = {'courses': courses, 'course': course, 'actions': actions, 'steps': steps, 'photos': photos}
+    step_counter = 0
+    for step in steps:
+        step_counter += 1
+    context = {'courses': courses, 'course': course, 'actions': actions, 
+                'steps': steps, 'photos': photos, 'step_counter': step_counter}
     return render (request, 'client_interface/course_showing.html', context)
 
 

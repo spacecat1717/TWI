@@ -15,16 +15,16 @@
         <h1 class="h3 mb-3 fw-normal">Создать курс</h1>
         <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
             {% csrf_token %}
-            <div class="form-floating">
+            <div class="text-center">
                 {{ form.non_field_errors }}
                 {{ form.field.errors }}
-                <label for="{{form.title.id_for_label}}">Введите название курса</label>
+                <label  for="{{form.title.id_for_label}}">Введите название курса</label>
                 <br>
                 <br>
                 {{form.title}}
             </div>
             <br>
-            <div class="form-floating">
+            <div class="text-center">
                 {{ form.non_field_errors }}
                 {{ form.field.errors }}
                 <label for="{{form.description.id_for_label}}">Введите краткое описание курса</label>

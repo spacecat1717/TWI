@@ -11,12 +11,17 @@ from courses.models import Course, Action, Step, StepPhoto
 """main client page"""
 @login_required
 def index(request):
-    return render(request, 'client_interface/index.html')
+    courses = Course.objects.filter(owner=request.user)
+    actions = Action.objects.filter(owner=request.user)
+    steps = Step.objects.filter(owner=request.user)
+    context = {'courses': courses, 'actions': actions, 'steps': steps}
+    return render(request, 'client_interface/index.html', context)
 
 
 """course creation views"""
 @login_required
 def course_creation(request):
+    courses = Course.objects.filter(owner=request.user)
     if request.method == 'POST':
         form = CourseCreationForm(request.POST, request.FILES)
         if form.is_valid():
@@ -29,16 +34,18 @@ def course_creation(request):
             return redirect('client_interface:course_added', course.slug)
         raise ValidationError(_(form.errors))
     form = CourseCreationForm()
-    return render(request, 'client_interface/course_creation.html', {'form': form})
+    return render(request, 'client_interface/course_creation.html', {'courses': courses, 'form': form})
 
 @login_required
 def course_added(request, course_slug):
+    courses = Course.objects.filter(owner=request.user)
     course = Course.objects.get(slug=course_slug)
-    return render(request, 'client_interface/course_added.html', {'course': course})
+    return render(request, 'client_interface/course_added.html', {'courses': courses, 'course': course})
 
 
 @login_required
 def action_creation(request, course_slug):
+    courses = Course.objects.filter(owner=request.user)
     if request.method == 'POST':
         form = ActionCreationForm(request.POST, request.FILES)
         if form.is_valid():
@@ -52,12 +59,13 @@ def action_creation(request, course_slug):
         raise ValidationError(_(form.errors))
     else:
         form = ActionCreationForm()
-        return render(request, 'client_interface/action_creation.html', {'form': form})
+        return render(request, 'client_interface/action_creation.html', {'courses': courses, 'form': form})
 
 @login_required
 def action_added(request, course_slug, action_slug):
+    courses = Course.objects.filter(owner=request.user)
     action = Action.objects.get(slug=action_slug)
-    return render(request, 'client_interface/action_added.html', {'action': action})
+    return render(request, 'client_interface/action_added.html', {'courses': courses, 'action': action})
 
 
 def action_choices_execute(course_slug):
@@ -74,6 +82,7 @@ def action_choices_execute(course_slug):
 
 @login_required
 def step_creation(request, course_slug):
+    courses = Course.objects.filter(owner=request.user)
     course = Course.objects.get(slug=course_slug)
     if request.method == 'POST':
         form = StepCreationForm(request.POST, request.FILES)
@@ -99,12 +108,13 @@ def step_creation(request, course_slug):
                                      choices=action_choices)
         form = StepCreationForm(initial={})
         form.fields['action'] = choice_field
-        return render(request, 'client_interface/step_creation.html', {'course': course, 'form': form})
+        return render(request, 'client_interface/step_creation.html', {'courses': courses, 'course': course, 'form': form})
 
 @login_required
 def step_added(request, course_slug, step_slug):
+    courses = Course.objects.filter(owner=request.user)
     step = Step.objects.get(slug=step_slug)
-    return render(request, 'client_interface/step_added.html', {'step': step})
+    return render(request, 'client_interface/step_added.html', {'courses': courses, 'step': step})
 
 
 """showing view """
@@ -116,12 +126,12 @@ def all_courses(request):
 
 @login_required
 def course_showing(request, course_slug):
+    courses = Course.objects.filter(owner=request.user)
     course = Course.objects.get(slug=course_slug)
     actions = course.action_set.all()
     steps = Step.objects.all()
-    for step in steps:
-        photos = step.photos.all()
-    context = {'course': course, 'actions': actions, 'steps': steps}
+    photos = StepPhoto.objects.all()
+    context = {'courses': courses, 'course': course, 'actions': actions, 'steps': steps, 'photos': photos}
     return render (request, 'client_interface/course_showing.html', context)
 
 

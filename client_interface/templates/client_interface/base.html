@@ -12,93 +12,47 @@
 </head>
 
 <body>
-    <nav class="navbar-light navbar-expand-lg bg-light rounded" style="background-color: #CCCCCC" aria-label="Twelfth navbar example">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample10" aria-controls="navbarsExample10" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-  
-          <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample10">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="{% url 'client_interface:index' %}">TWI обучение</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Ссылка на что нибудь</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{% url 'client_interface:all_courses' %}">Ваши курсы</a></li>
-                  <li><a class="dropdown-item" href="{% url 'client_interface:course_creation' %}">Создать курс</a></li>
-                  <li><a class="dropdown-item" href="#">Что то еще</a></li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'account:logout' %}">Выйти</a>
-              </li>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" style="background-color: #a0a0a0f3">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'client_interface:index' %}">TWI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">О проекте</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Боты</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">{ название бота }</a></li>
+              <li><a class="dropdown-item" href="#">{ название бота }</a></li>
+              <li><a class="dropdown-item" href="#">{ название бота }</a></li>
             </ul>
-          </div>
-        </div>
-      </nav>
-      <div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
-        <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
-          <span class="fs-5 fw-semibold">Панель управления</span>
-        </a>
-        <ul class="list-unstyled ps-0">
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-              Курсы
-            </button>
-            <div class="collapse show" id="home-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed">Overview</a></li>
-                <li><a href="#" class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed">Updates</a></li>
-                <li><a href="#" class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed">Reports</a></li>
-              </ul>
-            </div>
           </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-              Dashboard
-            </button>
-            <div class="collapse" id="dashboard-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Overview</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Weekly</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Monthly</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Annually</a></li>
-              </ul>
-            </div>
+          <li class="nav-item">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Курсы</a>
+            <ul class="dropdown-menu">
+              {% if courses %}
+              {% for course in courses %}
+              <li><a class="dropdown-item" href="{% url 'client_interface:course_showing' course.slug %}">{{course.title}}</a></li>
+              {% endfor %}
+              <li><a class="dropdown-item" href="{% url 'client_interface:course_creation' %}">Новый курс</a></li>
+              {% else %}
+              <li><a class="dropdown-item" href="{% url 'client_interface:course_creation' %}">Новый курс</a></li>
+            </ul>
           </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
-              Orders
-            </button>
-            <div class="collapse" id="orders-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">New</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Processed</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Shipped</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Returned</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="border-top my-3"></li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-              Account
-            </button>
-            <div class="collapse" id="account-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">New...</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Profile</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Settings</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Sign out</a></li>
-              </ul>
-            </div>
+          {% endif %}
           </li>
         </ul>
+        <li class="d-flex text-end">
+          <a class="nav-link active" style="color:rgba(255, 255, 255, 0.89)" href="{% url 'account:logout' %}">Выйти</a>
+        </li>
       </div>
-      {% block content %}{% endblock %}
+    </div>
+  </nav>
+  <div class="text-center">
+    {% block content %}{% endblock %}
+  </div>
 </body>

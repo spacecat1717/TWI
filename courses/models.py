@@ -26,6 +26,7 @@ class Action(models.Model):
     title = models.CharField(max_length=100)
     cover = models.ImageField(upload_to = 'media/courses/actions/covers/static/', null=True)
     slug = AutoSlugField(populate_from='title', unique=True, db_index=True)
+    owner = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
 
     def get_absolute_url(self):
         return reverse('action', kwargs={'action_slug': self.slug})
@@ -40,6 +41,7 @@ class Step(models.Model):
     description = models.CharField(max_length=250)
     main_text = models.TextField()
     slug = AutoSlugField(populate_from='title', unique=True, db_index=True)
+    owner = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
 
     def get_absolute_url(self):
         return reverse('step', kwargs={'step_slug': self.slug})

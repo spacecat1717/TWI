@@ -11,7 +11,7 @@
 <body>
     {% block content %}
     <h1 class="display-5 fw-bold text-center">Курс {{course.title}}</h1>
-    <table class="table table-success table-striped">
+    <table class="table table-striped">
         <thead>
             <tr>
               <th scope="col">Обложка</th>
@@ -29,7 +29,7 @@
             </tr>
     </table>  
     {% for action in actions %}
-    <table class="table table-success table-striped">
+    <table class="table  table-striped">
         <thead>
             <tr>
                 <th scope="col">Обложка раздела</th>
@@ -47,7 +47,7 @@
             </tr>
             {% for step in steps %}
             {% if step.action == action %}
-            <table class="table table-success table-striped">
+            <table class="table  table-striped">
                 <tbody>
                     <tr>
                         <th scope="col">Ключевой момент</th>
@@ -62,13 +62,15 @@
                         <td scope="col">{{step.main_text}}</td>
                     </tr>
                     {% if step.photos %}
-                    <table class="table table-success table-striped">
+                    <table class="table  table-striped">
                         <tbody>
                             <tr>
                                 {% for photo in photos %}
+                                {% if photo.step == step %}
                                 <th scope="col">
                                     <img class="img-thimbnails" src="{{photo.photo.url}}" width="300" height="300">  
                                 </th>
+                                {% endif %}
                                 {% endfor %}
                             </tr>
                         </tbody>

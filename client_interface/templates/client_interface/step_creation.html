@@ -60,6 +60,15 @@
               {{form.photos}}
           </div>
           <br>
+          <div class="text-center">
+            {{ form.non_field_errors }}
+            {{ form.field.errors }}
+            <label for="{{form.video.id_for_label}}">Загрузите видео (необязательно)</label>
+            <br>
+            <br>
+            {{form.video}}
+        </div>
+        <br>
            <button class="btn btn-primary" style="background-color: #b0b5f8" name='submit' > Создать</button>
           </form>
     </main>

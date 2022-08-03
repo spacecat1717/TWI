@@ -18,3 +18,4 @@ class StepCreationForm(forms.Form):
     description = forms.CharField(max_length=255)
     text = forms.CharField(max_length=5000, widget=forms.Textarea)
     photos = forms.ImageField(widget=forms.FileInput(attrs={'multiple': 'multiple'}), required=False)
+    video = forms.FileField(widget=forms.FileInput, required=False)

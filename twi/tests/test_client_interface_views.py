@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.template.defaultfilters import slugify
 from django.conf import settings
-from courses.models import Course, Action, Step, StepPhoto
+from courses.models import Course, Action, Step, StepPhoto, StepVideo
 from account.models import Account
 from client_interface.forms import CourseCreationForm, ActionCreationForm, StepCreationForm
 

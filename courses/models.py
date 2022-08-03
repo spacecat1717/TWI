@@ -53,3 +53,7 @@ class Step(models.Model):
 class StepPhoto(models.Model):
     photo = models.ImageField(upload_to = 'media/courses/actions/photos/static/', null=True)
     step = models.ForeignKey(Step, related_name='photos', on_delete=models.CASCADE, default=1)
+
+class StepVideo(models.Model):
+    video = models.FileField(upload_to='media/courses/actions/videos/', null=True)
+    step = models.ForeignKey(Step, related_name='video', on_delete=models.CASCADE, default=1)

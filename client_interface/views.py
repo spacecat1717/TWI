@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 from django.contrib.auth.decorators import login_required
 from django.template.defaultfilters import slugify
 from .forms import CourseCreationForm, ActionCreationForm, StepCreationForm
-from courses.models import Course, Action, Step, StepPhoto
+from courses.models import Course, Action, Step, StepPhoto, StepVideo
 
 """main client page"""
 @login_required
@@ -99,7 +99,10 @@ def step_creation(request, course_slug):
                 data = f.read()
                 photo = StepPhoto(step=step)
                 photo.photo.save(f.name, ContentFile(data))
-                photo.save()                   
+                photo.save()
+            if cd['video']:
+                video = StepVideo(video=request.FILES['video'])
+                video.save()              
             return redirect('client_interface:step_added', course.slug, step.slug)
         raise ValidationError(_(form.errors))
     else:

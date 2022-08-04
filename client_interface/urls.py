@@ -15,5 +15,9 @@ urlpatterns = [
     #SHOWING
     path('all_courses/', views.all_courses, name='all_courses'),
     path('courses/show/<slug:course_slug>/', views.course_showing, name='course_showing'),
+    #EDITING
+    path('courses/<slug:course_slug>/edit/', views.course_editing, name='course_editing'),
+    path('courses/<slug:course_slug>/<slug:action_slug>/edit/', views.action_editing, name='action_editing'),
+    path('courses/<slug:course_slug>/<slug:action_slug>/<slug:step_slug>/edit/', views.step_editing, name='step_editing'),
 
 ]

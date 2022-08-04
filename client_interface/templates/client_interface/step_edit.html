@@ -1,0 +1,70 @@
+{% extends 'client_interface/base.html' %}
+{% load bootstrap5 %}
+
+head>
+    {% block title %}
+    <title>
+        Редактирование ключевого момента
+    </title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <main class="form-signin w-100 ">
+        <h1 class="h3 mb-3 fw-normal">Изменить ключевой момент</h1>
+        <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
+            {% csrf_token %}
+            <div class="text-center">
+                <p>Этап</p>
+                {{action.title}}
+            </div>
+            <div class="text-center">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label  for="{{form.title.id_for_label}}">Название ключевого момента</label>
+                <br>
+                <br>
+                {{form.title}}
+            </div>
+            <br>
+            <div class="text-center">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label  for="{{form.description.id_for_label}}">Причина выделения ключевого момента</label>
+                <br>
+                <br>
+                {{form.description}}
+            </div>
+            <br>
+            <div class="text-center">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label  for="{{form.main_text.id_for_label}}">Основная инструкция</label>
+                <br>
+                <br>
+                {{form.main_text}}
+            </div>
+            <br>
+            <div>
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label for="{{form.cover.id_for_label}}">Прикрепите фото (необязательно)</label>
+                <br>
+                <br>
+                {{form.photos}}
+            </div>
+            <br>
+            <div class="text-center">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label for="{{form.video.id_for_label}}">Загрузите видео (необязательно)</label>
+                <br>
+                <br>
+                {{form.video}}
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" style="background-color: #b0b5f8" name='submit' > Сохранить</button>
+        </form>
+    </main>
+    {% endblock %}
+</body>

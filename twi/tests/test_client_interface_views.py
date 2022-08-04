@@ -146,7 +146,7 @@ class TestStepCreationView(TestCase):
             'action': 'test-action2',
             'title': title,
             'description': desc,
-            'text': text,
+            'main_text': text,
             }
         form = StepCreationForm(data=data)
         response = c.post(f'/client/{course.slug}/step_creation/', data=data)
@@ -205,7 +205,6 @@ class TestAllCoursesShowingView(TestCase):
         self.assertTrue(len(response.context['courses']) == len(courses))
         
 
-
 class TestCourseShowingView(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -251,10 +250,155 @@ class TestCourseShowingView(TestCase):
         self.assertEqual(showed_first_step.description, step.description)
         self.assertEqual(showed_first_step.main_text, step.main_text)
         
-
-
+class TestCourseEditingView(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = Account.objects.create_user(email='test@twi.ru', username='test_user')
+        cls.user.set_password('AaA12345')
+        cls.user.save()
+        Course.objects.create(title='test', description='test descr', owner=Account(id=1))
         
-    
+
+    def test_course_editing_url_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        response = c.get(f'/client/courses/{course.slug}/edit/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_course_editing_correct_template(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        response = c.get(f'/client/courses/{course.slug}/edit/')
+        self.assertTemplateUsed('client_interface/course_edit.html')
+
+    def test_course_editing_context_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        form = CourseCreationForm(instance=course)
+        response = c.get(f'/client/courses/{course.slug}/edit/')
+        showing_form = response.context['form']
+        self.assertEqual(showing_form.instance.title, course.title)
+        self.assertEqual(showing_form.instance.description, course.description)
+
+    def test_course_editing_redirect_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        form = CourseCreationForm(instance=course)
+        data = {
+            'title': 'new title',
+            'description': 'new descr',
+        }
+        response = c.post(f'/client/courses/{course.slug}/edit/', instance=course, data=data)
+        self.assertRedirects(response, f'/client/courses/show/{course.slug}/')
+
+
+class TestActionEditingView(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = Account.objects.create_user(email='test@twi.ru', username='test_user')
+        cls.user.set_password('AaA12345')
+        cls.user.save()
+        Course.objects.create(title='test', description='test descr', owner=Account(id=1))
+        Action.objects.create(course=Course(id=1), title='test-action')
+        
+    def test_action_editing_url_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        action = Action.objects.filter(course=course).first()
+        response = c.get(f'/client/courses/{course.slug}/{action.slug}/edit/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_action_editing_template_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        action = Action.objects.filter(course=course).first()
+        response = c.get(f'/client/courses/{course.slug}/{action.slug}/edit/')
+        self.assertTemplateUsed('client_interface/action_edit.html')
+
+    def test_action_editing_context_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        action = Action.objects.filter(course=course).first()
+        form = ActionCreationForm(instance=action)
+        response = c.get(f'/client/courses/{course.slug}/{action.slug}/edit/')
+        showing_form = response.context['form']
+        self.assertEqual(showing_form.instance.title, action.title)  
+
+    def test_action_editing_redirect_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        action = Action.objects.filter(course=course).first()
+        form = ActionCreationForm(instance=action)
+        data = {
+            'title': 'test action title',
+        }
+        response = c.post(f'/client/courses/{course.slug}/{action.slug}/edit/', instance=action, data=data)
+        self.assertRedirects(response, f'/client/courses/show/{course.slug}/')
+
+class TestStepEditingView(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = Account.objects.create_user(email='test@twi.ru', username='test_user')
+        cls.user.set_password('AaA12345')
+        cls.user.save()
+        Course.objects.create(title='test', description='test descr', owner=Account(id=1))
+        Action.objects.create(course=Course(id=1), title='test-action')
+        Step.objects.create(action=Action(id=1),title='test step',
+                            description='test step descr', main_text='step test text')
+
+    def test_step_editing_url_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        action = Action.objects.filter(course=course).first()
+        step = Step.objects.filter(action=action).first()
+        response = c.get(f'/client/courses/{course.slug}/{action.slug}/{step.slug}/edit/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_step_editing_correct_template(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        action = Action.objects.filter(course=course).first()
+        step = Step.objects.filter(action=action).first()
+        response = c.get(f'/client/courses/{course.slug}/{action.slug}/{step.slug}/edit/')
+        self.assertTemplateUsed('client_interface/step_edit.html')
+
+    def test_step_editing_context_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        action = Action.objects.filter(course=course).first()
+        step = Step.objects.filter(action=action).first()
+        form = StepCreationForm(instance=step)
+        response = c.get(f'/client/courses/{course.slug}/{action.slug}/{step.slug}/edit/')
+        showing_form = response.context['form']
+        self.assertEqual(showing_form.instance.title, step.title)
+        self.assertEqual(showing_form.instance.description, step.description)
+        self.assertEqual(showing_form.instance.main_text, step.main_text)
+
+    def test_step_editing_redirect_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        action = Action.objects.filter(course=course).first()
+        step = Step.objects.filter(action=action).first()
+        form = StepCreationForm(instance=step)
+        data = {
+            'title': 'test title',
+            'description': 'test descr',
+            'main_text': 'test text',
+        }
+        response = c.post(f'/client/courses/{course.slug}/{action.slug}/{step.slug}/edit/', instanse=step, data=data)
+        self.assertRedirects(response, f'/client/courses/show/{course.slug}/')
 
     
         

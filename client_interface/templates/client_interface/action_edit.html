@@ -1,0 +1,40 @@
+{% extends 'client_interface/base.html' %}
+{% load bootstrap5 %}
+
+<head>
+    {% block title %}
+    <title>
+        Редактирование этапа'
+    </title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <main class="form-signin w-100 ">
+        <h1 class="h3 mb-3 fw-normal">Изменить этап</h1>
+        <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
+            {% csrf_token %}
+            <div class="text-center">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label  for="{{form.title.id_for_label}}">Название этапа</label>
+                <br>
+                <br>
+                {{form.title}}
+            </div>
+            <br>
+            <div>
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label for="{{form.cover.id_for_label}}">Прикрепите обложку (необязательно)</label>
+                <br>
+                <br>
+                {{form.cover}}
+            </div>
+            <br>
+            <button class="w-100 btn btn-lg btn-primary" style="background-color: #b0b5f8" name='submit' > Сохранить</button>
+        </form>
+    </main>
+    {% endblock %}
+</body>

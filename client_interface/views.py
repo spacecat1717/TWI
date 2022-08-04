@@ -92,7 +92,7 @@ def step_creation(request, course_slug):
             step = Step.objects.create(action=action,
                                     title=cd['title'],
                                     description=cd['description'],
-                                    main_text=cd['text'],
+                                    main_text=cd['main_text'],
                                     slug=slugify(cd['title'])) 
                 
             for f in request.FILES.getlist('photos'):
@@ -108,7 +108,7 @@ def step_creation(request, course_slug):
     else:
         action_choices = action_choices_execute(course_slug)
         choice_field = forms.ChoiceField(widget=forms.Select(),
-                                     choices=action_choices)
+                                     choices=action_choices,required=False)
         form = StepCreationForm(initial={})
         form.fields['action'] = choice_field
         return render(request, 'client_interface/step_creation.html', {'courses': courses, 'course': course, 'form': form})
@@ -134,11 +134,67 @@ def course_showing(request, course_slug):
     actions = course.action_set.all()
     steps = Step.objects.all()
     photos = StepPhoto.objects.all()
-    step_counter = 0
-    for step in steps:
-        step_counter += 1
     context = {'courses': courses, 'course': course, 'actions': actions, 
-                'steps': steps, 'photos': photos, 'step_counter': step_counter}
+                'steps': steps, 'photos': photos}
     return render (request, 'client_interface/course_showing.html', context)
 
+"""editing"""
+@login_required
+def course_editing(request, course_slug):
+    courses = Course.objects.filter(owner=request.user)
+    course = Course.objects.filter(slug=course_slug).first()
+    if request.method == 'POST':
+        form = CourseCreationForm(instance=course, data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('client_interface:course_showing', course.slug)
+    form = CourseCreationForm(instance=course)
+    return render(request, 'client_interface/course_edit.html', {'courses': courses, 'course': course, 
+                'form': form})
 
+@login_required
+def action_editing(request, course_slug, action_slug):
+    courses = Course.objects.filter(owner=request.user)
+    action = Action.objects.filter(slug=action_slug).first()
+    if request.method == 'POST':
+        form = ActionCreationForm(instance=action, data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('client_interface:course_showing', course_slug)
+    form = ActionCreationForm(instance=action)
+    context = {'courses': courses, 'action': action, 'form': form}
+    return render(request, 'client_interface/action_edit.html', context)
+
+@login_required
+def step_editing(request, course_slug, action_slug, step_slug):
+    courses = Course.objects.filter(owner=request.user)
+    course = Course.objects.filter(slug=course_slug).first()
+    action = Action.objects.filter(slug=action_slug).first()
+    step = Step.objects.filter(slug=step_slug).first()
+    if request.method == 'POST':
+        form = StepCreationForm(instance=step, data=request.POST, files=request.FILES)
+        if form.is_valid():
+            cd = form.cleaned_data
+            step.action = action
+            step.title = cd['title']
+            step.description = cd['description']
+            step.main_text = cd['main_text']
+            step.save()
+            #step.save(update_fields=['action'], ['title'], ['description'], ['main_text'])
+            for f in request.FILES.getlist('photos'):
+                data = f.read()
+                photo = StepPhoto(step=step)
+                photo.photo.save(f.name, ContentFile(data))
+                photo.save()
+            if cd['video']:
+                video = StepVideo(step=step, video=request.FILES['video'])
+                video.save()        
+            form.save()
+            return redirect('client_interface:course_showing', course_slug)
+    action_choices = action_choices_execute(course_slug)
+    choice_field = forms.ChoiceField(widget=forms.Select(),
+                                    choices=action_choices)
+    form = StepCreationForm(initial={}, instance=step)
+    form.fields['action'] = choice_field
+    context = {'courses': courses, 'course': course, 'action': action, 'step': step, 'form': form}
+    return render(request, 'client_interface/step_edit.html', context)

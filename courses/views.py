@@ -35,3 +35,4 @@ def step_view(request, course_slug, action_slug, step_slug):
     except:
         context = {'step': step, 'photos': photos}
     return render(request, 'courses/step.html', context)
+

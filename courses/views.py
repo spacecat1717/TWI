@@ -29,6 +29,9 @@ def action_view(request, course_slug, action_slug):
 def step_view(request, course_slug, action_slug, step_slug):
     step = get_object_or_404(Step, slug=step_slug)
     photos = step.photos.all()
-    video = StepVideo.objects.get(step=step)
-    context = {'step': step, 'photos': photos, 'video': video}
+    try:
+        video = StepVideo.objects.get(step=step)
+        context = {'step': step, 'photos': photos, 'video': video}
+    except:
+        context = {'step': step, 'photos': photos}
     return render(request, 'courses/step.html', context)

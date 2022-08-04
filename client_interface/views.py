@@ -101,7 +101,7 @@ def step_creation(request, course_slug):
                 photo.photo.save(f.name, ContentFile(data))
                 photo.save()
             if cd['video']:
-                video = StepVideo(video=request.FILES['video'])
+                video = StepVideo(step=step, video=request.FILES['video'])
                 video.save()              
             return redirect('client_interface:step_added', course.slug, step.slug)
         raise ValidationError(_(form.errors))

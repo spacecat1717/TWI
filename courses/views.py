@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Course, Action, Step, StepPhoto
+from .models import Course, Action, Step, StepPhoto, StepVideo
 
 
 
@@ -29,5 +29,6 @@ def action_view(request, course_slug, action_slug):
 def step_view(request, course_slug, action_slug, step_slug):
     step = get_object_or_404(Step, slug=step_slug)
     photos = step.photos.all()
-    context = {'step': step, 'photos': photos}
+    video = StepVideo.objects.get(step=step)
+    context = {'step': step, 'photos': photos, 'video': video}
     return render(request, 'courses/step.html', context)

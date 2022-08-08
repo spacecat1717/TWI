@@ -10,6 +10,9 @@
 
 <body>
     {% block content %}
+    <h2> {{course.title}}</h2>
+    <a class="btn btn-outline-primary" href="{% url 'client_interface:course_editing' course.slug %}">Редактировать курс</a>
+    <a class="btn btn-outline-danger" href="{% url 'client_interface:course_deleting' course.slug %}">Удалить курс</a>
     {% if processes %}
     {% for process in processes %}
     <br>

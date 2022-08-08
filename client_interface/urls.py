@@ -19,6 +19,8 @@ urlpatterns = [
     path('courses/<slug:course_slug>/<slug:process_slug>/edit/', views.process_editing, name='process_editing'),
     path('courses/<slug:course_slug>/<slug:process_slug>/<slug:action_slug>/edit/', views.action_editing, name='action_editing'),
     path('courses/<slug:course_slug>/<slug:process_slug>/<slug:action_slug>/<slug:step_slug>/edit/', views.step_editing, name='step_editing'),
+    #DELETING
+    path('courses/<slug:course_slug>/deletion/', views.course_deleting, name='course_deleting'),
     #SHOWING
     path('courses/<slug:course_slug>/', views.course_showing, name='course_showing'),
     path('courses/<slug:course_slug>/<slug:process_slug>/', views.process_showing, name='process_showing'),

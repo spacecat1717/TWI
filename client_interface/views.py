@@ -270,3 +270,13 @@ def step_editing(request, course_slug, action_slug, process_slug, step_slug):
     form.fields['action'] = choice_field
     context = {'courses': courses, 'course': course, 'action': action, 'step': step, 'form': form}
     return render(request, 'client_interface/step_edit.html', context)
+
+"""deleting"""
+@login_required
+def course_deleting(request, course_slug):
+    course = Course.objects.get(slug=course_slug)
+    if request.method == "POST":
+        course.delete()
+        return redirect('client_interface:index')
+    return render(request, 'client_interface/course_deletion.html', {'course': course})
+

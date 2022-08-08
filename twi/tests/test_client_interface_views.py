@@ -568,7 +568,42 @@ class TestStepEditingView(TestCase):
         response = c.post(f'/client/courses/{course.slug}/{process.slug}/{action.slug}/{step.slug}/edit/', instanse=step, data=data)
         self.assertRedirects(response, f'/client/courses/{course.slug}/{process.slug}/{action.slug}/')
 
-    
+class TestCourseDeletingView(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = Account.objects.create_user(email='test@twi.ru', username='test_user')
+        cls.user.set_password('AaA12345')
+        cls.user.save()
+        Course.objects.create(title='test', description='test descr', owner=Account(id=1))
+
+    def test_deleting_confirmation_url_exists(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        response = c.get(f'/client/courses/{course.slug}/deletion/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_deleting_confirmation_page_correct_template(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        response = c.get(f'/client/courses/{course.slug}/deletion/')
+        self.assertTemplateUsed('client_interface/course_deleton.html')
+
+    def test_deleting_course(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        response = c.post(f'/client/courses/{course.slug}/deletion/')
+        self.assertFalse(Course.objects.filter(slug=course.slug).exists())
+
+    def test_deleting_course_redirect_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        response = c.post(f'/client/courses/{course.slug}/deletion/')
+        self.assertRedirects(response, '/client/')
+
         
 
         

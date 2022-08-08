@@ -1,5 +1,5 @@
 from django.test import TestCase
-from courses.models import Course, Action, Step
+from courses.models import Course, Action, Step, Process
 
 
 class CoursesListTest(TestCase):
@@ -28,15 +28,15 @@ class CoursesListTest(TestCase):
             self.assertEqual(first_object.cover, course.cover)
         self.assertTrue(len(response.context['courses']) == 5)
 
+
 class CourseViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         Course.objects.create(title='test', description='test descr', 
                     cover='/media/courses/covers/static/20_Lazy_Cats_That_Will_Make_You_LOL.jpg')
-        total_actions = 3
-        for i in range(total_actions +1):
-            Action.objects.create(course=Course(id=1), title='test action', 
-                                cover='media/courses/actions/covers/static/1583861548.6278.jpg')
+        total_processes = 3
+        for i in range(total_processes +1):
+            Process.objects.create(course=Course(id=1), title='test title', description='test descr')
         
     def test_view_url_exists(self):
         course = Course.objects.get(id=1)
@@ -50,81 +50,82 @@ class CourseViewTest(TestCase):
 
     def test_context_is_correct(self):
         course = Course.objects.get(id=1)
-        actions = Action.objects.all()
-        action = Action.objects.get(id=1)
+        processes = Process.objects.all()
+        process = Process.objects.get(id=1)
         response = self.client.get(f'/courses/{course.slug}/')
-        first_course_action = response.context['course_actions'][0]
-        self.assertEquals(first_course_action.title, action.title)
-        self.assertEquals(first_course_action.cover, action.cover)
-        self.assertTrue(len(response.context['course_actions']) == len(actions))
+        first_course_process = response.context['processes'][0]
+        self.assertEquals(first_course_process.title, process.title)
+        self.assertEquals(first_course_process.cover, process.cover)
+        self.assertTrue(len(response.context['processes']) == len(processes))
 
+class ProcessViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        Course.objects.create(title='test', description='test descr', 
+                    cover='/media/courses/covers/static/20_Lazy_Cats_That_Will_Make_You_LOL.jpg')
+        Process.objects.create(course=Course(id=1), title='test title', description='test descr')
+        Action.objects.create(process=Process(id=1), title='test action')
+
+    def test_view_url_exists(self):
+        course = Course.objects.get(id=1)
+        process = Process.objects.get(id=1)
+        response = self.client.get(f'/courses/{course.slug}/{process.slug}/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        course = Course.objects.get(id=1)
+        process = Process.objects.get(id=1)
+        response = self.client.get(f'/courses/{course.slug}/{process.slug}/')
+        self.assertTemplateUsed('courses/process.html')
+
+    def test_context_is_correct(self):
+        course = Course.objects.get(id=1)
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
+        response = self.client.get(f'/courses/{course.slug}/{process.slug}/')
+        first_showing_action = response.context['actions'][0]
+        self.assertEqual(first_showing_action.title, action.title)
+        self.assertEqual(first_showing_action.main_text, action.main_text)
+        self.assertTrue(len(response.context['actions']) == 1)
+        
 
 class ActionViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         Course.objects.create(title='test', description='test descr', 
                     cover='/media/courses/covers/static/20_Lazy_Cats_That_Will_Make_You_LOL.jpg')
-        Action.objects.create(course=Course(id=1), title='test action', 
-                                cover='media/courses/actions/covers/static/1583861548.6278.jpg')
-        Step.objects.create(action=Action(id=1), title='test step', description='test desc', 
-                                                                    main_text='test text')
+        Process.objects.create(course=Course(id=1), title='test title', description='test descr')
+        Action.objects.create(process=Process(id=1), title='test action')
+        Step.objects.create(action=Action(id=1), title='test step', description='test descr')
 
     def test_view_url_exists(self):
         course = Course.objects.get(id=1)
-        action = Action.objects.get(course=course)
-        response = self.client.get(f'/courses/{course.slug}/{action.slug}/')
-        return self.assertEqual(response.status_code, 200)
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
+        response = self.client.get(f'/courses/{course.slug}/{process.slug}/{action.slug}/')
+        self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
         course = Course.objects.get(id=1)
-        action = Action.objects.get(course=course)
-        self.assertTemplateUsed('courses/action.html') 
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
+        response = self.client.get(f'/courses/{course.slug}/{process.slug}/{action.slug}/')
+        self.assertTemplateUsed('courses/action.html')
 
     def test_context_is_correct(self):
         course = Course.objects.get(id=1)
-        action = Action.objects.get(course=course) 
-        steps = Step.objects.all()
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
         step = Step.objects.get(id=1)
-        response = self.client.get(f'/courses/{course.slug}/{action.slug}/')
-        first_action_step = response.context['steps'][0]
-        self.assertEqual(first_action_step.title, step.title)
-        self.assertEqual(first_action_step.description, step.description)
-        self.assertEqual(first_action_step.main_text, step.main_text)
-        self.assertTrue(len(response.context['steps']) == len(steps)) 
+        response = self.client.get(f'/courses/{course.slug}/{process.slug}/{action.slug}/')
+        first_showing_step = response.context['steps'][0]
+        showing_action = response.context['action']
+        self.assertEqual(first_showing_step.title, step.title)
+        self.assertEqual(first_showing_step.description, step.description)
+        self.assertEqual(showing_action.main_text, action.main_text)
+        self.assertTrue(len(response.context['steps']) == 1)
 
-class StepViewTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        Course.objects.create(title='test', description='test descr', 
-                    cover='/media/courses/covers/static/20_Lazy_Cats_That_Will_Make_You_LOL.jpg')
-        Action.objects.create(course=Course(id=1), title='test action', 
-                                cover='media/courses/actions/covers/static/1583861548.6278.jpg')
-        Step.objects.create(action=Action(id=1), title='test step', description='test desc', 
-                                                                    main_text='test text')
-
-    def test_view_url_exists(self):
-        course = Course.objects.get(id=1)
-        action = Action.objects.get(course=course)
-        step = Step.objects.get(action=action)
-        response = self.client.get(f'/courses/{course.slug}/{action.slug}/{step.slug}/')
-        return self.assertEqual(response.status_code, 200)
-
-    def test_view_uses_correct_template(self):
-        course = Course.objects.get(id=1)
-        action = Action.objects.get(course=course)
-        step = Step.objects.get(action=action)
-        self.assertTemplateUsed('courses/step.html')
     
-    def test_context_is_correct(self):
-        course = Course.objects.get(id=1)
-        action = Action.objects.get(course=course)
-        step = Step.objects.get(action=action)
-        response = self.client.get(f'/courses/{course.slug}/{action.slug}/{step.slug}/')
-        step_showed = response.context['step']
-        self.assertEqual(step_showed.title, step.title)
-        self.assertEqual(step_showed.description, step.description)
-        self.assertEqual(step_showed.main_text, step.main_text)
-        
 
         
                

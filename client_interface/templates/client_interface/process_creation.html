@@ -1,0 +1,45 @@
+{% extends 'client_interface/base.html' %}
+{% load bootstrap5 %}
+
+<head>
+    {% block title %}
+    <title> {{course.title}}</title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <main class="form-signin w-100 ">
+        <h1 class="h3 mb-3 fw-normal">Создать процесс для курса {{course.title}}</h1>
+        <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
+            {% csrf_token %}
+           <div class="text-center">
+               {{ form.non_field_errors }}
+               {{ form.field.errors }}
+               <label for="{{form.title.id_for_label}}">Введите название процесса</label>
+               <br>
+               <br>
+               {{form.title}}
+           </div>
+           <div class="text-center">
+            {{ form.non_field_errors }}
+            {{ form.field.errors }}
+            <label for="{{form.description.id_for_label}}">Введите название процесса</label>
+            <br>
+            <br>
+            {{form.description}}
+        </div>
+           <div class="text-center">
+               {{ form.non_field_errors }}
+               {{ form.field.errors }}
+               <label for="{{form.cover.id_for_label}}">Добавьте обложку для процесса (необязательно)</label>
+               <br>
+               <br>
+               {{form.cover}}
+           </div>
+           <br>
+           <button class="w-100 btn btn-lg btn-primary" style="background-color: #b0b5f8" name='submit' > Создать</button>
+          </form>
+    </main>
+    {% endblock %}
+</body>

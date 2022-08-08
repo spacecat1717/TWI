@@ -1,29 +1,38 @@
 {% extends 'courses/base.html' %}
 
 <head>
+    <meta charset="UTF-8">
     {% block title %}
-    <title> {{action.title}}</title>
-    {%endblock%}
+    <title> {{action.process.course.title}}</title>
+   {% endblock %}
 </head>
 
 <body>
-  {% block content %}
-  <div class="text-center">
-    <h3 class="text-center">Курс {{action.course.title}}</h3>
-    <h5> Раздел {{action.title}}</h5>
-  </div>
-  <div class="list-group w-auto">
-    {% for step in steps %}
-    <a href="{% url 'courses:step_view' step.action.course.slug step.action.slug step.slug %}" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-      <img src="#">
-      <div class="d-flex gap-2 w-100 justify-content-between">
-        <div>
-         <h6 class="mb-0">{{step.title}}</h6>
-         <p class="mb-0 opacity-75"> {{step.description | linebreaks}} </p>
+    {% block content %}
+    <h4 class="text-center"> {{course.title}}</h4>
+    <div class="text-center">
+      {% for step in steps %}
+        <div class="d-flex gap-2 w-100 justify-content-between">
+          <div>
+            <h5>{{step.title}}</h5>
+            <p>{{step.description}}</p>
+          </div>
         </div>
+      {% endfor %}
+      <div>
+        <p> {{action.main_text}}</p>
       </div>
-    </a>
-    {% endfor %}
-  </div>
-  {% endblock %}
-</body>
+      <div>
+        {% if photos %}
+        {% for photo in photos %}
+        <img src="{{photo.photo.url}}" class="img-thumbnails">
+        {% endfor %}
+        {% endif %}
+        {% if video %}
+            <video src="{{video.video.url}}" type="video/mp4" controls autoplay width='50%' height='40%'>
+            </video>
+            {% endif %}
+      </div>
+    </div>
+    {% endblock %}
+  </body>

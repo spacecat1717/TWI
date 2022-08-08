@@ -1,10 +1,10 @@
 {% extends 'client_interface/base.html' %}
 {% load bootstrap5 %}
 
-head>
+<head>
     {% block title %}
     <title>
-        Редактирование ключевого момента
+        Редактирование процесса
     </title>
     {% endblock %}
 </head>
@@ -12,21 +12,17 @@ head>
 <body>
     {% block content %}
     <main class="form-signin w-100 ">
-        <h1 class="h3 mb-3 fw-normal">Изменить ключевой момент</h1>
+        <h1 class="h3 mb-3 fw-normal">Изменить процесс </h1>
         <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
             {% csrf_token %}
             <div class="text-center">
-                {{ form.non_field_errors }}
-                {{ form.field.errors }}
-                <label  for="{{form.action.id_for_label}}">Этап"</label>
-                <br>
-                <br>
-                {{form.action}}
+                <p>Процесс</p>
+                {{process.title}}
             </div>
             <div class="text-center">
                 {{ form.non_field_errors }}
                 {{ form.field.errors }}
-                <label  for="{{form.title.id_for_label}}">Название ключевого момента</label>
+                <label  for="{{form.title.id_for_label}}">Название процесса</label>
                 <br>
                 <br>
                 {{form.title}}
@@ -35,10 +31,18 @@ head>
             <div class="text-center">
                 {{ form.non_field_errors }}
                 {{ form.field.errors }}
-                <label  for="{{form.description.id_for_label}}">Причина выделения ключевого момента</label>
+                <label  for="{{form.description.id_for_label}}">Описание этапа</label>
                 <br>
                 <br>
                 {{form.description}}
+            </div>
+            <div class="text-center">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label  for="{{form.cover.id_for_label}}">Обложка для процесса (необязательно) </label>
+                <br>
+                <br>
+                {{form.cover}}
             </div>
             <br>
             <button class="w-100 btn btn-lg btn-primary" style="background-color: #b0b5f8" name='submit' > Сохранить</button>

@@ -1,0 +1,66 @@
+{% extends 'client_interface/base.html' %}
+{% load static %}
+
+<head>
+    {% block title %}
+    <title>
+        {{action.process.course.title}}
+    </title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <br>
+    <br>
+    <br>
+    <h1 class="display-5 fw-bold text-center"> Процесс {{action.process.title}}</h1>
+    <div class="text-end">
+        <a href="{% url 'client_interface:process_editing' action.process.course.slug action.process.slug %}" class="btn btn-outline-primary">Редактировать процесс</a>
+    </div>
+    <div class="px-3 py-5 my-4 text-center">
+        {% if video %}
+            <video src="{{video.video.url}}" type="video/mp4" controls autoplay width='50%' height='40%'>
+            </video>
+            {% endif %}
+    </div>
+    <div class="px-3 py-5 my-4 text-center">
+        {% if photos %}
+        {% for photo in photos %}
+        <img src="{{photo.photo.url}}" class="img-thumbnails">
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="px-3 py-5 my-4 text-center">
+        <p> {{action.main_text}}</p>
+    </div>
+    <table class="table">
+        <col style="width:15%">
+        <col style="width:15%">
+        <col style="width:20%">
+        <col style="width:40%">
+        <col style="width:15%">
+        <thead>
+            <tr>
+              <th scope="col">Ключевой момент</th>
+              <th scope="col">Причина выделения ключевого момента</th>
+              <th scope="col">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for step in steps %}
+            <tr>
+                <td scope="row" style="background-color: #CCCCCC">{{action.title | linebreaks}}</td> 
+                <td scope="row">{{step.title}}</td>
+                <td scope="row" style="background-color: #CCCCCC">{{step.description}}</td>
+                <td scope="row" style="background-color: #CCCCCC" class="text-end">
+                    <br>
+                    <a href="{% url 'client_interface:step_editing' course.slug process.slug action.slug step.slug %}" class="btn btn-outline-primary">Редактировать ключевой момент</a>
+                    <br>
+                    <a href="#" class="btn btn-outline-danger">Удалить ключевой момент</a>
+                </td>
+                {% endfor %}
+            </tr>
+    </table> 
+  {% endblock %}   
+</body>

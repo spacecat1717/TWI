@@ -18,19 +18,43 @@
             <div class="text-center">
                 {{ form.non_field_errors }}
                 {{ form.field.errors }}
+                <label  for="{{form.process.id_for_label}}">Операция</label>
+                <br>
+                <br>
+                {{form.process}}
+            </div>
+            <div class="text-center">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
                 <label  for="{{form.title.id_for_label}}">Название этапа</label>
                 <br>
                 <br>
                 {{form.title}}
             </div>
             <br>
-            <div>
+            <div class="text-center">
                 {{ form.non_field_errors }}
                 {{ form.field.errors }}
-                <label for="{{form.cover.id_for_label}}">Прикрепите обложку (необязательно)</label>
+                <label  for="{{form.main_text.id_for_label}}">Основная инструкция</label>
                 <br>
                 <br>
-                {{form.cover}}
+                {{form.main_text}}
+            </div>
+            <div class="text-center">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label  for="{{form.photos.id_for_label}}">Прикрепите фото (необязательно)</label>
+                <br>
+                <br>
+                {{form.photos}}
+            </div>
+            <div class="text-center">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label  for="{{form.video.id_for_label}}">Прикрепите видео (необязательно)</label>
+                <br>
+                <br>
+                {{form.video}}
             </div>
             <br>
             <button class="w-100 btn btn-lg btn-primary" style="background-color: #b0b5f8" name='submit' > Сохранить</button>

@@ -3,7 +3,7 @@
 <head>
     {% block title %}
     <title>
-        Курс {{action.course.title}}
+        Курс {{action.process.course.title}}
     </title>
     {% endblock %}
 </head>
@@ -11,12 +11,12 @@
 <body>
     {% block content %}
     <div class="px-4 py-5 my-5 text-center">
-        <h1 class="display-5 fw-bold">Этап {{action.title}} для курса {{action.course.title}} успешно создан</h1>
+        <h1 class="display-5 fw-bold">Этап {{action.title}} для процесса {{action.process.title}} успешно создан</h1>
         <div class="col-lg-6 mx-auto">
           <p class="lead mb-4">Любой нужный текст</p>
           <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <a href="{% url 'client_interface:action_creation' action.course.slug %}" class="btn btn-secondary btn-lg px-4 gap-3">Создать еще один этап</a>
-            <a href="{% url 'client_interface:step_creation' action.course.slug %}" class="btn btn-primary btn-lg px-4 gap-3">Добавить ключевые моменты</a>
+            <a href="{% url 'client_interface:action_creation' action.process.course.slug  action.process.slug %}" class="btn btn-secondary btn-lg px-4 gap-3">Создать еще один этап</a>
+            <a href="{% url 'client_interface:step_creation' action.process.course.slug action.process.slug %}" class="btn btn-primary btn-lg px-4 gap-3">Добавить ключевые моменты</a>
           </div>
         </div>
       </div>

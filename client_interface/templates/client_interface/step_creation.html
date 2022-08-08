@@ -42,33 +42,6 @@
                {{form.description}}
            </div>
            <br>
-           <div class="text-center">
-              {{ form.non_field_errors }}
-              {{ form.field.errors }}
-              <label for="{{form.main_text.id_for_label}}">Основная инструкция</label>
-              <br>
-              <br>
-              {{form.main_text}}
-          </div>
-          <br>
-          <div class="text-center">
-              {{ form.non_field_errors }}
-              {{ form.field.errors }}
-              <label for="{{form.photos.id_for_label}}">Приложите фотографии (необязательно)</label>
-              <br>
-              <br>
-              {{form.photos}}
-          </div>
-          <br>
-          <div class="text-center">
-            {{ form.non_field_errors }}
-            {{ form.field.errors }}
-            <label for="{{form.video.id_for_label}}">Загрузите видео (необязательно)</label>
-            <br>
-            <br>
-            {{form.video}}
-        </div>
-        <br>
            <button class="btn btn-primary" style="background-color: #b0b5f8" name='submit' > Создать</button>
           </form>
     </main>

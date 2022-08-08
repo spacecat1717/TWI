@@ -10,13 +10,21 @@
 <body>
     {% block content %}
     <main class="form-signin w-100 ">
-        <h1 class="h3 mb-3 fw-normal">Создать этап работ для курса {{course.title}}</h1>
+        <h1 class="h3 mb-3 fw-normal">Создать этап работ </h1>
         <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
             {% csrf_token %}
+            <div class="text-center">
+                {{ form.non_field_errors }}
+                {{ form.field.errors }}
+                <label for="{{form.process.id_for_label}}">Выберите процесс, к которому относится этап</label>
+                <br>
+                <br>
+                {{form.process}}
+            </div>
            <div class="text-center">
                {{ form.non_field_errors }}
                {{ form.field.errors }}
-               <label for="{{form.title.id_for_label}}">Введите название раздела</label>
+               <label for="{{form.title.id_for_label}}">Введите название этапа</label>
                <br>
                <br>
                {{form.title}}
@@ -24,12 +32,30 @@
            <div class="text-center">
                {{ form.non_field_errors }}
                {{ form.field.errors }}
-               <label for="{{form.cover.id_for_label}}">Добавьте обложку для раздела (необязательно)</label>
+               <label for="{{form.main_text.id_for_label}}">Напишите описание этапа работ</label>
                <br>
                <br>
-               {{form.cover}}
+               {{form.main_text}}
            </div>
            <br>
+           <div class="text-center">
+               {{ form.non_field_errors }}
+               {{ form.field.errors }}
+               <label for="{{form.photos.id_for_label}}">Прикрепите фото (необязательно) </label>
+               <br>
+               <br>
+               {{form.photos}}
+           </div>
+           <br>
+           <div class="text-center">
+            {{ form.non_field_errors }}
+            {{ form.field.errors }}
+            <label for="{{form.video.id_for_label}}">Прикрепите видео (необязательно) </label>
+            <br>
+            <br>
+            {{form.video}}
+        </div>
+        <br>
            <button class="w-100 btn btn-lg btn-primary" style="background-color: #b0b5f8" name='submit' > Создать</button>
           </form>
     </main>

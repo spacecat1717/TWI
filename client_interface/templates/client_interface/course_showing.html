@@ -10,49 +10,27 @@
 
 <body>
     {% block content %}
+    {% if processes %}
+    {% for process in processes %}
     <br>
     <br>
-    <br>
-    <h1 class="display-5 fw-bold text-center">Курс {{course.title}}</h1>
-    <div class="text-end">
-        <a href="{% url 'client_interface:course_editing' course.slug %}" class="btn btn-outline-primary">Редактировать курс</a>
+    <li>
+        <ul>
+            <a href="{% url 'client_interface:process_showing' course.slug  process.slug %}">
+                <h6>{{process.title}}</h6>
+                <p> {{process.description}}</p>
+                <a class="btn btn-outline-primary" href="{% url 'client_interface:process_editing' course.slug process.slug %}"> Редактировать процесс</a>
+            </a>
+        </ul>
+    </li>
+    {% endfor %}
+    {% else %}
+    <div>
+        <h2> Процессы скоро будут добавлены</h2>
     </div>
-    <table class="table">
-        <col style="width:15%">
-        <col style="width:15%">
-        <col style="width:20%">
-        <col style="width:40%">
-        <col style="width:15%">
-        <thead>
-            <tr>
-              <th scope="col">Этап</th>
-              <th scope="col">Ключевой момент</th>
-              <th scope="col">Причина выделения ключевого момента</th>
-              <th scope="col">Основная инструкция</th>
-              <th scope="col">Действия</th>
-            </tr>
-        </thead>
-        <tbody>
-                {% for action in actions %}
-                {% for step in steps %}
-                {% if step.action == action %}
-            <tr>
-                <td scope="row" style="background-color: #CCCCCC">{{action.title | linebreaks}}</td> 
-                <td scope="row">{{step.title}}</td>
-                <td scope="row" style="background-color: #CCCCCC">{{step.description}}</td>
-                <td scope="row">{{step.main_text | linebreaks}}</td>
-                <td scope="row" style="background-color: #CCCCCC" class="text-end">
-                    <a href="{% url 'client_interface:action_editing' course.slug action.slug %}" class="btn btn-outline-primary">Редактировать этап</a>
-                    <br>
-                    <a href="{% url 'client_interface:step_editing' course.slug action.slug step.slug %}" class="btn btn-outline-primary">Редактировать ключевой момент</a>
-                    <br>
-                    <a href="#" class="btn btn-outline-danger">Удалить этап</a>
-                    <a href="#" class="btn btn-outline-danger">Удалить ключевой момент</a>
-                </td>
-                {% endif %}
-                {% endfor %}
-                {% endfor %}
-            </tr>
-    </table> 
+    {% endif %}
+    <div class="text-center">
+        <a class="btn btn-outline-primary" href="#">Добавить новый процесс </a>
+      </div>
   {% endblock %}   
 </body>

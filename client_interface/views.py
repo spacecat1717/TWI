@@ -156,7 +156,8 @@ def step_added(request, course_slug, process_slug, step_slug):
     courses = Course.objects.filter(owner=request.user)
     process = Process.objects.get(slug=process_slug)
     step = Step.objects.get(slug=step_slug)
-    return render(request, 'client_interface/step_added.html', {'courses': courses, 'process': process, 'step': step})
+    action = step.action
+    return render(request, 'client_interface/step_added.html', {'courses': courses, 'process': process, 'action': action, 'step': step})
 
 
 """showing view """

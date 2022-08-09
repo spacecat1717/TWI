@@ -10,6 +10,8 @@
 
 <body>
     {% block content %}
+    <br>
+    <br>
     <h2> {{course.title}}</h2>
     <a class="btn btn-outline-primary" href="{% url 'client_interface:course_editing' course.slug %}">Редактировать курс</a>
     <a class="btn btn-outline-danger" href="{% url 'client_interface:course_deleting' course.slug %}">Удалить курс</a>
@@ -20,10 +22,10 @@
     <li>
         <ul>
             <a href="{% url 'client_interface:process_showing' course.slug  process.slug %}">
-                <h6>{{process.title}}</h6>
+                <h6>{{process.title}}</h6></a>
                 <p> {{process.description}}</p>
                 <a class="btn btn-outline-primary" href="{% url 'client_interface:process_editing' course.slug process.slug %}"> Редактировать процесс</a>
-            </a>
+            
         </ul>
     </li>
     {% endfor %}
@@ -33,7 +35,7 @@
     </div>
     {% endif %}
     <div class="text-center">
-        <a class="btn btn-outline-primary" href="#">Добавить новый процесс </a>
+        <a class="btn btn-outline-primary" href="{% url 'client_interface:process_creation' course.slug %}">Добавить новый процесс </a>
       </div>
   {% endblock %}   
 </body>

@@ -18,6 +18,7 @@
           <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
             <a href="{% url 'client_interface:step_creation' step.action.process.course.slug step.action.process.slug %}" class="btn btn-secondary btn-lg px-4 gap-3">Создать еще один ключевой момент</a>
             <a href="{% url 'client_interface:action_creation' step.action.process.slug step.action.process.course.slug %}" class="btn btn-secondary btn-lg px-4 gap-3">Вернуться к созданию этапов</a>
+            <a href="{% url 'client_interface:action_showing' process.course.slug process.slug step.action.slug %}" class="btn btn-secondary btn-lg px-4 gap-3">Перейти на страницу этапа </a>
             <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Загрузить курс в бота</a>
             </div>
         </div>

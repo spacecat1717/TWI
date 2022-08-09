@@ -62,5 +62,8 @@
                 {% endfor %}
             </tr>
     </table> 
+    <div class="text-center">
+        <a class="btn btn-outline-primary" href="{% url 'client_interface:step_creation' course.slug process.slug %}">Добавить ключевой момент </a>
+      </div>
   {% endblock %}   
 </body>

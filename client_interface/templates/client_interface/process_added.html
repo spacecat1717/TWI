@@ -18,6 +18,7 @@
             <p class="lead mb-4">Любой нужный текст</p>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
               <a href="{% url 'client_interface:action_creation' process.course.slug  process.slug %}" class="btn btn-primary btn-lg px-4 gap-3">Перейти к созданию этапов </a>
+              <a href="{% url 'client_interface:course_showing' process.course.slug %}" class="btn btn-secondary btn-lg px-4 gap-3">Перейти на страницу курса </a>
             </div>
           </div>
         </div>

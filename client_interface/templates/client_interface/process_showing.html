@@ -43,7 +43,7 @@
                   {% endfor %}
               </div>
               <div class="text-center">
-                <a class="btn btn-outline-primary" href="#">Добавить новую операцию </a>
+                <a class="btn btn-outline-primary" href="{% url 'client_interface:action_creation' process.course.slug process.slug %}">Добавить новую операцию </a>
               </div> 
             </div>
         </div> 

@@ -25,6 +25,7 @@
                 <h6>{{process.title}}</h6></a>
                 <p> {{process.description}}</p>
                 <a class="btn btn-outline-primary" href="{% url 'client_interface:process_editing' course.slug process.slug %}"> Редактировать процесс</a>
+                <a class="btn btn-outline-danger" href="{% url 'client_interface:process_deleting' course.slug process.slug %}"> Удалить процесс</a>
             
         </ul>
     </li>

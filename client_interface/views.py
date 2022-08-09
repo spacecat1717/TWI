@@ -275,9 +275,45 @@ def step_editing(request, course_slug, action_slug, process_slug, step_slug):
 """deleting"""
 @login_required
 def course_deleting(request, course_slug):
+    courses = Course.objects.filter(owner=request.user)
     course = Course.objects.get(slug=course_slug)
     if request.method == "POST":
         course.delete()
         return redirect('client_interface:index')
-    return render(request, 'client_interface/course_deletion.html', {'course': course})
+    return render(request, 'client_interface/course_deletion.html', {'courses': courses, 'course': course})
 
+@login_required
+def process_deleting(request, course_slug, process_slug):
+    courses = Course.objects.filter(owner=request.user)
+    course = Course.objects.get(slug=course_slug)
+    process = Process.objects.get(slug=process_slug)
+    if request.method == 'POST':
+        process.delete()
+        return redirect('client_interface:course_showing', course.slug)
+    context = {'courses': courses, 'course': course, 'process': process}
+    return render(request, 'client_interface/process_deletion.html', context)
+
+@login_required
+def action_deleting(request, course_slug, process_slug, action_slug):
+    courses = Course.objects.filter(owner=request.user)
+    course = Course.objects.get(slug=course_slug)
+    process = Process.objects.get(slug=process_slug)
+    action = Action.objects.get(slug=action_slug)
+    if request.method == 'POST':
+        action.delete()
+        return redirect('client_interface:process_showing', course_slug, process_slug)
+    context = {'courses': courses, 'course': course, 'process': process, 'action': action}
+    return render(request, 'client_interface/action_deletion.html', context)
+
+@login_required
+def step_deleting(request, course_slug, process_slug, action_slug, step_slug):
+    courses = Course.objects.filter(owner=request.user)
+    course = Course.objects.get(slug=course_slug)
+    process = Process.objects.get(slug=process_slug)
+    action = Action.objects.get(slug=action_slug)
+    step = Step.objects.get(slug=step_slug)
+    if request.method == 'POST':
+        step.delete()
+        return redirect('client_interface:action_showing', course_slug, process_slug, action_slug)
+    context = context = {'courses': courses, 'course': course, 'process': process, 'action': action, 'step': step}
+    return render(request, 'client_interface/step_deletion.html', context)

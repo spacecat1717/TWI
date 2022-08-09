@@ -33,6 +33,7 @@
                       <div class="card-body">
                         <a class="card-link" href="{% url 'client_interface:action_showing' process.course.slug process.slug action.slug %}"> {{action.title}} </a>
                         <a class="btn btn-outline-primary" href="{% url 'client_interface:action_editing' process.course.slug process.slug action.slug %}"> Редактировать этап</a>
+                        <a class="btn btn-outline-primary" href="{% url 'client_interface:action_deleting' process.course.slug process.slug action.slug %}">Удалить этап</a>
                       </div>
                     </div>
                   </div>

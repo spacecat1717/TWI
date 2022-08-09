@@ -57,7 +57,7 @@
                     <br>
                     <a href="{% url 'client_interface:step_editing' course.slug process.slug action.slug step.slug %}" class="btn btn-outline-primary">Редактировать ключевой момент</a>
                     <br>
-                    <a href="#" class="btn btn-outline-danger">Удалить ключевой момент</a>
+                    <a href="{% url 'client_interface:step_deleting' course.slug process.slug action.slug step.slug %}" class="btn btn-outline-danger">Удалить ключевой момент</a>
                 </td>
                 {% endfor %}
             </tr>

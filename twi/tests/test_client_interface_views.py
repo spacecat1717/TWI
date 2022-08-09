@@ -588,7 +588,7 @@ class TestCourseDeletingView(TestCase):
         c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
         course = Course.objects.get(owner=Account(id=1))
         response = c.get(f'/client/courses/{course.slug}/deletion/')
-        self.assertTemplateUsed('client_interface/course_deleton.html')
+        self.assertTemplateUsed('client_interface/course_deletion.html')
 
     def test_deleting_course(self):
         c = Client()
@@ -604,8 +604,143 @@ class TestCourseDeletingView(TestCase):
         response = c.post(f'/client/courses/{course.slug}/deletion/')
         self.assertRedirects(response, '/client/')
 
-        
+class TestProcessDeletingView(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = Account.objects.create_user(email='test@twi.ru', username='test_user')
+        cls.user.set_password('AaA12345')
+        cls.user.save()
+        Course.objects.create(title='test', description='test descr', owner=Account(id=1))
+        Process.objects.create(course=Course(id=1), title='test process', description='test process descr' )
 
+    def test_deleting_confirmation_url_exists(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        response = c.get(f'/client/courses/{course.slug}/{process.slug}/deletion/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_deleting_confirmatin_temlate_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        response = c.get(f'/client/courses/{course.slug}/{process.slug}/deletion/')
+        self.assertTemplateUsed('client_interface/process_deletion.html')
+
+    def test_deleting_process(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        response = c.post(f'/client/courses/{course.slug}/{process.slug}/deletion/')
+        self.assertFalse(Process.objects.filter(slug=process.slug).exists())
+
+    def test_deleting_process_redirect_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        response = c.post(f'/client/courses/{course.slug}/{process.slug}/deletion/')
+        self.assertRedirects(response, f'/client/courses/{course.slug}/')
+        
+class TestActionDeletionView(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = Account.objects.create_user(email='test@twi.ru', username='test_user')
+        cls.user.set_password('AaA12345')
+        cls.user.save()
+        Course.objects.create(title='test', description='test descr', owner=Account(id=1))
+        Process.objects.create(course=Course(id=1), title='test process', description='test process descr' )
+        Action.objects.create(process=Process(id=1), title='test action', main_text='test action text')
+
+    def test_deletion_confirmation_url_exists(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
+        response = c.get(f'/client/courses/{course.slug}/{process.slug}/{action.slug}/deletion/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_deletion_confirmation_template_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
+        response = c.get(f'/client/courses/{course.slug}/{process.slug}/{action.slug}/deletion/')
+        self.assertTemplateUsed('client_interface/action_deletion.html')
+    
+    def test_action_deleting(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
+        response = c.post(f'/client/courses/{course.slug}/{process.slug}/{action.slug}/deletion/')
+        self.assertFalse(Action.objects.filter(slug=action.slug).exists())
+
+    def test_deleting_action_redirect_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
+        response = c.post(f'/client/courses/{course.slug}/{process.slug}/{action.slug}/deletion/')
+        self.assertRedirects(response, f'/client/courses/{course.slug}/{process.slug}/')
+
+class TestStepDeletionView(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = Account.objects.create_user(email='test@twi.ru', username='test_user')
+        cls.user.set_password('AaA12345')
+        cls.user.save()
+        Course.objects.create(title='test', description='test descr', owner=Account(id=1))
+        Process.objects.create(course=Course(id=1), title='test process', description='test process descr' )
+        Action.objects.create(process=Process(id=1), title='test action', main_text='test action text')
+        Step.objects.create(action=Action(id=1), title='test step', description='test step descr')
+
+    def test_deletion_confirmation_url_exists(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
+        step = Step.objects.get(id=1)
+        response = c.get(f'/client/courses/{course.slug}/{process.slug}/{action.slug}/{step.slug}/deletion/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_deletion_confirmation_template_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
+        step = Step.objects.get(id=1)
+        response = c.get(f'/client/courses/{course.slug}/{process.slug}/{action.slug}/{step.slug}/deletion/')
+        self.assertTemplateUsed('client_interface/step_deletion/html')
+
+    def test_step_deleting(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
+        step = Step.objects.get(id=1)
+        response = c.post(f'/client/courses/{course.slug}/{process.slug}/{action.slug}/{step.slug}/deletion/')
+        self.assertFalse(Step.objects.filter(slug=step.slug).exists())
+
+    def test_deleting_confirmation_redirect_correct(self):
+        c = Client()
+        c.force_login(self.user, backend='django.contrib.auth.backends.ModelBackend')
+        course = Course.objects.get(owner=Account(id=1))
+        process = Process.objects.get(id=1)
+        action = Action.objects.get(id=1)
+        step = Step.objects.get(id=1)
+        response = c.post(f'/client/courses/{course.slug}/{process.slug}/{action.slug}/{step.slug}/deletion/')
+        self.assertRedirects(response, f'/client/courses/{course.slug}/{process.slug}/{action.slug}/')
         
 
     

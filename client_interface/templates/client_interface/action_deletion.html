@@ -1,0 +1,24 @@
+{% extends 'client_interface/base.html' %}
+
+<head>
+    {% block title %}
+    <title>
+        {{action.title}}
+    </title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <br>
+    <br>
+    <div class="text-center">
+        <h2> Вы уверены, что хотите удалить этап {{action.title}}?</h2>
+        <h6> Все ключевые моменты и файлы также будут удалены!</h6>
+        <form action="{% url 'client_interface:action_deleting' course.slug process.slug action.slug %}" method="post">
+            {% csrf_token %}
+          <button class="w-100 btn btn-outline-danger" name='submit' > ДА</button>
+        </form>
+    </div>
+    {% endblock %}
+</body>

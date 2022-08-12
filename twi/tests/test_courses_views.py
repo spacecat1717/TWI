@@ -64,7 +64,7 @@ class ProcessViewTest(TestCase):
         Course.objects.create(title='test', description='test descr', 
                     cover='/media/courses/covers/static/20_Lazy_Cats_That_Will_Make_You_LOL.jpg')
         Process.objects.create(course=Course(id=1), title='test title', description='test descr')
-        Action.objects.create(process=Process(id=1), title='test action')
+        Action.objects.create(process=Process(id=1), title='test action', description='test descr')
 
     def test_view_url_exists(self):
         course = Course.objects.get(id=1)
@@ -85,18 +85,18 @@ class ProcessViewTest(TestCase):
         response = self.client.get(f'/courses/{course.slug}/{process.slug}/')
         first_showing_action = response.context['actions'][0]
         self.assertEqual(first_showing_action.title, action.title)
-        self.assertEqual(first_showing_action.main_text, action.main_text)
+        self.assertEqual(first_showing_action.description, action.description)
         self.assertTrue(len(response.context['actions']) == 1)
         
-
 class ActionViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         Course.objects.create(title='test', description='test descr', 
                     cover='/media/courses/covers/static/20_Lazy_Cats_That_Will_Make_You_LOL.jpg')
         Process.objects.create(course=Course(id=1), title='test title', description='test descr')
-        Action.objects.create(process=Process(id=1), title='test action')
-        Step.objects.create(action=Action(id=1), title='test step', description='test descr')
+        Action.objects.create(process=Process(id=1), title='test action', description='test descr')
+        Step.objects.create(action=Action(id=1), step_title='test step', 
+                                                key_moment='test desc', key_moment_reason='test')
 
     def test_view_url_exists(self):
         course = Course.objects.get(id=1)
@@ -120,9 +120,10 @@ class ActionViewTest(TestCase):
         response = self.client.get(f'/courses/{course.slug}/{process.slug}/{action.slug}/')
         first_showing_step = response.context['steps'][0]
         showing_action = response.context['action']
-        self.assertEqual(first_showing_step.title, step.title)
-        self.assertEqual(first_showing_step.description, step.description)
-        self.assertEqual(showing_action.main_text, action.main_text)
+        self.assertEqual(first_showing_step.step_title, step.step_title)
+        self.assertEqual(first_showing_step.key_moment, step.key_moment)
+        self.assertEqual(first_showing_step.key_moment_reason, step.key_moment_reason)
+        self.assertEqual(showing_action.description, action.description)
         self.assertTrue(len(response.context['steps']) == 1)
 
     

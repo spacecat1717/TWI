@@ -26,7 +26,7 @@ def process_view(request, course_slug, process_slug):
 
 def action_view(request, course_slug, process_slug, action_slug):
     action = Action.objects.get(slug=action_slug)
-    steps = action.step_set.all()
+    steps = Step.objects.filter(action=action)
     photos = action.photos.all()
     video = action.video.all()
     context = {'action': action, 'steps': steps, 'photos': photos, 'video': video}

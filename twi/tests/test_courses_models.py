@@ -27,7 +27,7 @@ class ActionModelTest(TestCase):
     def setUpTestData(cls):
         Course.objects.create(title='test', description='test descr', cover=None)
         Process.objects.create(course=Course(id=1), title='test proc', description='test descr')
-        Action.objects.create(process=Process(id=1), title='test action', main_text='test text')
+        Action.objects.create(process=Process(id=1), title='test action', description='test text')
     
     def test_slug_is_correct(self):
         course = Course.objects.get(id=1)
@@ -40,13 +40,14 @@ class StepModelTest(TestCase):
     def setUpTestData(cls):
         Course.objects.create(title='test', description='test descr', cover=None)
         Process.objects.create(course=Course(id=1), title='test proc', description='test descr')
-        Action.objects.create(process=Process(id=1), title='test action', main_text='test text')
-        Step.objects.create(action=Action(id=1), title='test step', description='test desc')
+        Action.objects.create(process=Process(id=1), title='test action', description='test text')
+        Step.objects.create(action=Action(id=1), step_title='test step', 
+                                                key_moment='test desc', key_moment_reason='test')
 
     def test_slug_is_correct(self):
         course = Course.objects.get(id=1)
         process = Process.objects.filter(course=course).first()
         action = Action.objects.get(process=process)
         step = Step.objects.get(action=action)
-        self.assertEquals(step.slug, slugify(step.title)) 
+        self.assertEquals(step.slug, slugify(step.step_title)) 
 

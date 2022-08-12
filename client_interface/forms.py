@@ -1,5 +1,6 @@
 from django import forms
-from courses.models import Course, Action, Step, Process
+from django.forms.models import inlineformset_factory, BaseInlineFormSet
+from courses.models import Course, Action, Step, Process, ActionPhoto, ActionVideo
 
 
 class CourseCreationForm(forms.ModelForm):
@@ -17,23 +18,28 @@ class ProcessCreationForm(forms.ModelForm):
     class Meta:
         model = Process
         fields = ['title', 'description', 'cover']  
-    
 
 class ActionCreationForm(forms.ModelForm):
-    process = forms.CharField(max_length=100) 
-    title = forms.CharField(max_length=100, widget=forms.TextInput)
+    process = forms.CharField(max_length=128) 
+    title = forms.CharField(max_length=128, widget=forms.TextInput)
     cover = forms.ImageField(widget=forms.FileInput, required=False)
-    main_text = forms.CharField(max_length=5000, widget=forms.Textarea)
+    description = forms.CharField(max_length=500, widget=forms.Textarea)
     photos = forms.ImageField(widget=forms.FileInput(attrs={'multiple': 'multiple'}), required=False)
-    video = forms.FileField(widget=forms.FileInput, required=False) 
+    video = forms.FileField(widget=forms.FileInput, required=False)
     class Meta:
         model = Action
-        fields = ['title', 'main_text', 'cover']
+        fields = ['title', 'description', 'cover']
 
 class StepCreationForm(forms.ModelForm):
-    action = forms.CharField(max_length=100)
-    title = forms.CharField(max_length=100)
-    description = forms.CharField(max_length=255)
+    action = forms.CharField(max_length=128, required=False)
+    step_title = forms.CharField(max_length=128, widget=forms.TextInput)
+    key_moment = forms.CharField(max_length=256, widget=forms.Textarea)
+    key_moment_reason = forms.CharField(max_length=1000, widget=forms.Textarea)
     class Meta:
         model = Step
-        fields = ['title', 'description']
+        fields = ['step_title', 'key_moment', 'key_moment_reason']
+
+
+
+
+

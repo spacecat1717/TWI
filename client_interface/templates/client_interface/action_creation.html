@@ -10,52 +10,91 @@
 <body>
     {% block content %}
     <main class="form-signin w-100 ">
-        <h1 class="h3 mb-3 fw-normal">Создать этап работ </h1>
+        <h1 class="h3 mb-3 fw-normal">Создать операцию </h1>
         <form method="post" enctype="multipart/form-data" class="form-control form-control-sm">
             {% csrf_token %}
             <div class="text-center">
-                {{ form.non_field_errors }}
-                {{ form.field.errors }}
-                <label for="{{form.process.id_for_label}}">Выберите процесс, к которому относится этап</label>
+                {{ action_form.non_field_errors }}
+                {{ action_form.field.errors }}
+                <label for="{{action_form.process.id_for_label}}">Выберите процесс, к которому относится операция</label>
                 <br>
                 <br>
-                {{form.process}}
+                {{action_form.process}}
             </div>
            <div class="text-center">
-               {{ form.non_field_errors }}
-               {{ form.field.errors }}
-               <label for="{{form.title.id_for_label}}">Введите название этапа</label>
+               {{ action_form.non_field_errors }}
+               {{ action_form.field.errors }}
+               <label for="{{action_form.title.id_for_label}}">Введите название операции</label>
                <br>
                <br>
-               {{form.title}}
+               {{action_form.title}}
            </div>
            <div class="text-center">
-               {{ form.non_field_errors }}
-               {{ form.field.errors }}
-               <label for="{{form.main_text.id_for_label}}">Напишите описание этапа работ</label>
+            {{ action_form.non_field_errors }}
+            {{ action_form.field.errors }}
+            <label for="{{action_form.cover.id_for_label}}">Прикрепите обложку (необязательно)</label>
+            <br>
+            <br>
+            {{action_form.cover}}
+        </div>
+           <div class="text-center">
+               {{ action_form.non_field_errors }}
+               {{ action_form.field.errors }}
+               <label for="{{action_form.description.id_for_label}}">Напишите краткое описание операции</label>
                <br>
                <br>
-               {{form.main_text}}
+               {{action_form.description}}
            </div>
            <br>
            <div class="text-center">
-               {{ form.non_field_errors }}
-               {{ form.field.errors }}
-               <label for="{{form.photos.id_for_label}}">Прикрепите фото (необязательно) </label>
+               {{ action_form.non_field_errors }}
+               {{ action_form.field.errors }}
+               <label for="{{action_form.photos.id_for_label}}">Прикрепите фото (необязательно) </label>
                <br>
                <br>
-               {{form.photos}}
+               {{action_form.photos}}
            </div>
            <br>
            <div class="text-center">
-            {{ form.non_field_errors }}
-            {{ form.field.errors }}
-            <label for="{{form.video.id_for_label}}">Прикрепите видео (необязательно) </label>
+            {{ action_form.non_field_errors }}
+            {{ action_form.field.errors }}
+            <label for="{{action_form.video.id_for_label}}">Прикрепите видео </label>
             <br>
             <br>
-            {{form.video}}
+            {{action_form.video}}
         </div>
         <br>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Этап работ</th>
+                    <th scope="col">Ключевые моменты</th>
+                    <th scope="col">Причины выделения ключевых моментов</th>
+                  </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row" style="background-color:#CCCCCC">
+                        {{ step_form.non_field_errors}}
+                        {{ step_form.field.errors }}
+                        <label for="{{step_form.step_title.id_for_label}}">Название этапа </label>
+                        {{step_form.step_title}}
+                    </td>
+                    <td scope="row" style="background-color:#CCCCCC">
+                        {{ step_form.non_field_errors}}
+                        {{ step_form.field.errors }}
+                        <label for="{{step_form.key_moment.id_for_label}}">Ключевые моменты </label>
+                        {{step_form.key_moment}}  
+                    </td>
+                    <td scope="row" style="background-color:#CCCCCC">
+                        {{ step_form.non_field_errors}}
+                        {{ step_form.field.errors }}
+                        <label for="{{step_form.key_moment_reason.id_for_label}}">Причины выделения ключевых моментов </label>
+                        {{step_form.key_moment_reason}}
+                    </td>   
+                </tr>
+            </tbody>
+        </table>
            <button class="w-100 btn btn-lg btn-primary" style="background-color: #b0b5f8" name='submit' > Создать</button>
           </form>
     </main>

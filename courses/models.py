@@ -37,7 +37,8 @@ class Process(models.Model):
 class Action(models.Model):
     process = models.ForeignKey(Process, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=100)
-    main_text = models.TextField()
+    description = models.TextField()
+    cover = models.ImageField(upload_to = 'media/courses/covers/static/', null=True)
     slug = AutoSlugField(populate_from='title', unique=True, db_index=True)
     
 
@@ -49,10 +50,11 @@ class Action(models.Model):
 
 
 class Step(models.Model):
-    action = models.ForeignKey(Action, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
-    description = models.CharField(max_length=250)
-    slug = AutoSlugField(populate_from='title', unique=True, db_index=True)
+    action = models.ForeignKey(Action, related_name='step', on_delete=models.CASCADE)
+    step_title = models.CharField(max_length=100)
+    key_moment = models.CharField(max_length=250)
+    key_moment_reason = models.CharField(max_length=250, null=True)
+    slug = AutoSlugField(populate_from='step_title', unique=True, db_index=True)
 
     def get_absolute_url(self):
         return reverse('step', kwargs={'step_slug': self.slug})

@@ -5,7 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.files.base import ContentFile
 from django.contrib.auth.decorators import login_required
 from django.template.defaultfilters import slugify
-from .forms import CourseCreationForm, ActionCreationForm, StepCreationForm, ProcessCreationForm
+from .forms import CourseCreationForm, ActionCreationForm, ProcessCreationForm, StepCreationForm
 from courses.models import Course, Action, Step, ActionPhoto, ActionVideo, Process
 
 """main client page"""
@@ -14,7 +14,6 @@ def index(request):
     courses = Course.objects.filter(owner=request.user)
     context = {'courses': courses}
     return render(request, 'client_interface/index.html', context)
-
 
 """course creation views"""
 @login_required
@@ -81,32 +80,52 @@ def process_choices_execute(course_slug, process_slug):
 def action_creation(request, course_slug, process_slug):
     courses = Course.objects.filter(owner=request.user)
     course = Course.objects.get(slug=course_slug)
+    process = Process.objects.get(slug=process_slug)
     if request.method == 'POST':
-        form = ActionCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            cd = form.cleaned_data
-            process = Process.objects.get(title=cd['process'])
+        action_form = ActionCreationForm(request.POST, request.FILES)
+        step_form = StepCreationForm(request.POST)
+        if action_form.is_valid() and step_form.is_valid():
+            acd = action_form.cleaned_data
+            scd = step_form.cleaned_data
+            process = Process.objects.get(title=acd['process'])
             action = Action.objects.create(process=process,
-                                    title=cd['title'],
-                                    main_text=cd['main_text'],
-                                    slug=slugify(cd['title']))
+                                title=acd['title'],
+                                description=acd['description'],
+                                cover=acd['cover'] or None,
+                                slug=slugify(acd['title']))
+            action.save()
+            step = Step.objects.create(action=action, step_title=scd['step_title'],
+                                    key_moment=scd['key_moment'], 
+                                key_moment_reason=scd['key_moment_reason'],
+                                slug=slugify(scd['step_title']))
             for f in request.FILES.getlist('photos'):
                 data = f.read()
                 photo = ActionPhoto(action=action)
                 photo.photo.save(f.name, ContentFile(data))
                 photo.save()
-            if cd['video']:
+            if acd['video']:
                 video = ActionVideo(action=action, video=request.FILES['video'])
                 video.save()
             return redirect('client_interface:action_added', course_slug, process.slug, action.slug)
-        raise BaseException (form.errors)
-    process_choices = process_choices_execute(course_slug, process_slug)
-    choice_field = forms.ChoiceField(widget=forms.Select(),
+        else:
+            #test errors print
+            print(action_form.errors, step_form.errors)
+    else:
+        process_choices = process_choices_execute(course_slug, process_slug)
+        choice_field = forms.ChoiceField(widget=forms.Select(),
                                      choices=process_choices)
-    form = ActionCreationForm(initial={})
-    form.fields['process'] = choice_field
-    return render(request, 'client_interface/action_creation.html', {'courses': courses, 'course': course, 'form': form})
-
+        action_form = ActionCreationForm(initial={})
+        action_form.fields['process'] = choice_field
+        action_choices = action_choices_execute(course_slug, process_slug)
+        choice_field = forms.ChoiceField(widget=forms.Select(),
+                                     choices=action_choices,required=False)
+        step_form = StepCreationForm(initial={})
+        step_form.fields['action'] = choice_field
+        context = { 'courses': courses, 'course': course, 'process': process,
+                             'action_form': action_form, 'step_form': step_form } 
+        return render(request, 'client_interface/action_creation.html', { 'courses': courses, 'course': course, 'process': process,
+                             'action_form': action_form, 'step_form': step_form })
+    
 @login_required
 def action_added(request, course_slug, process_slug, action_slug):
     courses = Course.objects.filter(owner=request.user)
@@ -127,38 +146,6 @@ def action_choices_execute(course_slug, process_slug):
         keys.append(action.title)
     action_choices = [(key, action) for key, action in zip(keys, actions)]
     return action_choices
-
-@login_required
-def step_creation(request, course_slug, process_slug):
-    courses = Course.objects.filter(owner=request.user)
-    course = Course.objects.get(slug=course_slug)
-    if request.method == 'POST':
-        form = StepCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            cd = form.cleaned_data
-            action = Action.objects.get(title=cd['action'])
-            step = Step.objects.create(action=action,
-                                    title=cd['title'],
-                                    description=cd['description'],
-                                    slug=slugify(cd['title']))            
-            return redirect('client_interface:step_added', course_slug, process_slug, step.slug)
-        raise BaseException (form.errors)
-    else:
-        action_choices = action_choices_execute(course_slug, process_slug)
-        choice_field = forms.ChoiceField(widget=forms.Select(),
-                                     choices=action_choices,required=False)
-        form = StepCreationForm(initial={})
-        form.fields['action'] = choice_field
-        return render(request, 'client_interface/step_creation.html', {'courses': courses, 'course': course, 'form': form})
-
-@login_required
-def step_added(request, course_slug, process_slug, step_slug):
-    courses = Course.objects.filter(owner=request.user)
-    process = Process.objects.get(slug=process_slug)
-    step = Step.objects.get(slug=step_slug)
-    action = step.action
-    return render(request, 'client_interface/step_added.html', {'courses': courses, 'process': process, 'action': action, 'step': step})
-
 
 """showing view """
 
@@ -184,7 +171,7 @@ def action_showing(request, course_slug, process_slug, action_slug):
     course = Course.objects.get(slug=course_slug)
     process = Process.objects.get(slug=process_slug)
     action = Action.objects.get(slug=action_slug)
-    steps = action.step_set.all()
+    steps = Step.objects.filter(action=action)
     photos = action.photos.all()
     try:
         video = ActionVideo.objects.get(action=action)
@@ -221,6 +208,7 @@ def process_editing(request, course_slug, process_slug):
     return render(request, 'client_interface/process_edit.html', context)
     
 @login_required
+# need to change(add steps) 
 def action_editing(request, course_slug, process_slug, action_slug):
     courses = Course.objects.filter(owner=request.user)
     course = Course.objects.filter(slug=course_slug).first()
@@ -252,8 +240,7 @@ def action_editing(request, course_slug, process_slug, action_slug):
     context = {'courses': courses, 'process': process, 'course': course, 'action': action, 'form': form}
     return render(request, 'client_interface/action_edit.html', context)
 
-@login_required
-def step_editing(request, course_slug, action_slug, process_slug, step_slug):
+
     courses = Course.objects.filter(owner=request.user)
     course = Course.objects.filter(slug=course_slug).first()
     action = Action.objects.filter(slug=action_slug).first()
@@ -304,16 +291,3 @@ def action_deleting(request, course_slug, process_slug, action_slug):
         return redirect('client_interface:process_showing', course_slug, process_slug)
     context = {'courses': courses, 'course': course, 'process': process, 'action': action}
     return render(request, 'client_interface/action_deletion.html', context)
-
-@login_required
-def step_deleting(request, course_slug, process_slug, action_slug, step_slug):
-    courses = Course.objects.filter(owner=request.user)
-    course = Course.objects.get(slug=course_slug)
-    process = Process.objects.get(slug=process_slug)
-    action = Action.objects.get(slug=action_slug)
-    step = Step.objects.get(slug=step_slug)
-    if request.method == 'POST':
-        step.delete()
-        return redirect('client_interface:action_showing', course_slug, process_slug, action_slug)
-    context = context = {'courses': courses, 'course': course, 'process': process, 'action': action, 'step': step}
-    return render(request, 'client_interface/step_deletion.html', context)

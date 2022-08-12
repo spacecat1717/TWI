@@ -42,6 +42,7 @@
         <col style="width:15%">
         <thead>
             <tr>
+              <th scope="col">Этап"</th>
               <th scope="col">Ключевой момент</th>
               <th scope="col">Причина выделения ключевого момента</th>
               <th scope="col">Действия</th>
@@ -50,20 +51,15 @@
         <tbody>
                 {% for step in steps %}
             <tr>
-                <td scope="row" style="background-color: #CCCCCC">{{action.title | linebreaks}}</td> 
+                <td scope="row" style="background-color: #CCCCCC">{{step.title | linebreaks}}</td> 
                 <td scope="row">{{step.title}}</td>
-                <td scope="row" style="background-color: #CCCCCC">{{step.description}}</td>
+                <td scope="row" style="background-color: #CCCCCC">{{step.key_moment}}</td>
+                <td scope="row" style="background-color: #CCCCCC">{{step.key_moment_reason}}</td>
                 <td scope="row" style="background-color: #CCCCCC" class="text-end">
                     <br>
-                    <a href="{% url 'client_interface:step_editing' course.slug process.slug action.slug step.slug %}" class="btn btn-outline-primary">Редактировать ключевой момент</a>
-                    <br>
-                    <a href="{% url 'client_interface:step_deleting' course.slug process.slug action.slug step.slug %}" class="btn btn-outline-danger">Удалить ключевой момент</a>
                 </td>
                 {% endfor %}
             </tr>
-    </table> 
-    <div class="text-center">
-        <a class="btn btn-outline-primary" href="{% url 'client_interface:step_creation' course.slug process.slug %}">Добавить ключевой момент </a>
-      </div>
+    </table>
   {% endblock %}   
 </body>
